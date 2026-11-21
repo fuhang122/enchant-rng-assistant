@@ -6,6 +6,11 @@
 - 手机 App（Android，约 105 KB）和网页版共用同一套界面与算法
 - 支持 1.21.4 – 26.3（含长矛 / 突刺）
 
+## 下载
+
+- **Android**：[enchrng-1.0.0.apk](apk/enchrng-1.0.0.apk)（约 110 KB，minSdk 21）
+- **网页版**：直接打开 [index.html](index.html)（也可以下载下来本地打开，功能完全一样）
+
 ## 它是怎么算的
 
 附魔台三档结果不是当场随机的，而是由玩家存了一个 32 位整数 `XpSeed` 决定：
@@ -41,7 +46,7 @@
 {"versionCode": 1, "versionName": "1.0.0", "url": "下载地址", "notes": "更新说明"}
 ```
 
-发版流程：改 `version.json` 的 `versionCode`/`versionName` → 把 APK 传到 GitHub Releases → 更新 `url` → 推上去。旧版用户点一下按钮就知道有新版。
+发版流程：把新 APK 放到 `apk/enchrng-<版本>.apk` → 改 `version.json` 的 `versionCode`/`versionName`/`url`/`notes` → 推上去。旧版用户点一下按钮就知道有新版，下载走 jsDelivr，国内也快。
 
 ## 构建
 

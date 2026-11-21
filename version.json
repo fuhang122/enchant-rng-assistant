@@ -2,6 +2,6 @@
   "versionCode": 1,
   "versionName": "1.0.0",
   "date": "2026-11-21",
-  "url": "https://github.com/fuhang122/enchant-rng-assistant/releases/latest",
+  "url": "https://cdn.jsdelivr.net/gh/fuhang122/enchant-rng-assistant@main/apk/enchrng-1.0.0.apk",
   "notes": "首个版本：向导式 6 组观测、WASM 扫种子、附魔表与刷种分支。"
 }
