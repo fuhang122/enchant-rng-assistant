@@ -7,8 +7,7 @@ src/build/app_themed.html
 src/build/tutorial_themed.html
 src/build/core.js
 # 打包相关
-/*.apk
-/apk-src/*.apk
+*.apk
 *.idsig
 apk-src/build/
 apk-src/classes/

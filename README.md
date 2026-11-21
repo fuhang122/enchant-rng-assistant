@@ -8,7 +8,7 @@
 
 ## 下载
 
-- **Android**：[enchrng-1.0.0.apk](apk/enchrng-1.0.0.apk)（约 110 KB，minSdk 21）
+- **Android**：[Releases 下载](https://github.com/fuhang122/enchant-rng-assistant/releases/latest) · `enchrng-1.0.0.apk`，约 110 KB，minSdk 21
 - **网页版**：直接打开 [index.html](index.html)（也可以下载下来本地打开，功能完全一样）
 
 ## 它是怎么算的
@@ -46,7 +46,7 @@
 {"versionCode": 1, "versionName": "1.0.0", "url": "下载地址", "notes": "更新说明"}
 ```
 
-发版流程：把新 APK 放到 `apk/enchrng-<版本>.apk` → 改 `version.json` 的 `versionCode`/`versionName`/`url`/`notes` → 推上去。旧版用户点一下按钮就知道有新版，下载走 jsDelivr，国内也快。
+发版流程：`git tag vX.Y.Z && git push origin vX.Y.Z` → 在 Releases 里传 APK → 改 `version.json` 的 `versionCode`/`versionName`/`url`/`notes` → 推上去。
 
 ## 构建
 
