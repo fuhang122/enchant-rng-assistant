@@ -13,8 +13,14 @@ import android.view.ViewGroup;
 import android.view.WindowInsets;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebChromeClient;
 import android.webkit.WebViewClient;
 
 public class MainActivity extends Activity {
@@ -45,9 +51,35 @@ public class MainActivity extends Activity {
         web.setBackgroundColor(Color.TRANSPARENT);
         web.setOverScrollMode(WebView.OVER_SCROLL_NEVER);
         web.addJavascriptInterface(new Bridge(), "AndroidHost");
+        web.setWebChromeClient(new WebChromeClient() {
+            @Override public boolean onJsAlert(WebView v, String url, String msg, final android.webkit.JsResult r) {
+                new android.app.AlertDialog.Builder(MainActivity.this)
+                    .setMessage(msg).setPositiveButton("好", new android.content.DialogInterface.OnClickListener() {
+                        public void onClick(android.content.DialogInterface d, int w) { r.confirm(); }
+                    }).setCancelable(false).show();
+                return true;
+            }
+            @Override public boolean onJsConfirm(WebView v, String url, String msg, final android.webkit.JsResult r) {
+                new android.app.AlertDialog.Builder(MainActivity.this)
+                    .setMessage(msg)
+                    .setPositiveButton("去下载", new android.content.DialogInterface.OnClickListener() {
+                        public void onClick(android.content.DialogInterface d, int w) { r.confirm(); }
+                    })
+                    .setNegativeButton("取消", new android.content.DialogInterface.OnClickListener() {
+                        public void onClick(android.content.DialogInterface d, int w) { r.cancel(); }
+                    }).setCancelable(false).show();
+                return true;
+            }
+        });
         web.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView v, String url) {
+                if (url != null && (url.startsWith("http://") || url.startsWith("https://"))) {
+                    try {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                    } catch (Exception ignored) {}
+                    return true;
+                }
                 return false;
             }
             @Override
@@ -78,6 +110,63 @@ public class MainActivity extends Activity {
     }
 
     private class Bridge {
+
+        /* 检查更新：多个镜像依次尝试，结果回传给页面 */
+        @JavascriptInterface
+        public void checkUpdate() {
+            new Thread(new Runnable() {
+                @Override public void run() {
+                    final String[] urls = {
+                        "https://cdn.jsdelivr.net/gh/fuhang122/enchant-rng-assistant@main/version.json",
+                        "https://ghfast.top/https://raw.githubusercontent.com/fuhang122/enchant-rng-assistant/main/version.json",
+                        "https://raw.githubusercontent.com/fuhang122/enchant-rng-assistant/main/version.json"
+                    };
+                    String body = null, err = null;
+                    for (String u : urls) {
+                        try {
+                            HttpURLConnection c = (HttpURLConnection) new URL(u).openConnection();
+                            c.setConnectTimeout(4000);
+                            c.setReadTimeout(6000);
+                            c.setRequestProperty("User-Agent", "enchrng-android");
+                            int code = c.getResponseCode();
+                            if (code == 200) {
+                                InputStream in = c.getInputStream();
+                                BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+                                StringBuilder sb = new StringBuilder();
+                                String line;
+                                while ((line = br.readLine()) != null) sb.append(line).append('\n');
+                                br.close();
+                                body = sb.toString();
+                                break;
+                            }
+                            err = "HTTP " + code;
+                        } catch (Exception e) {
+                            err = e.getClass().getSimpleName();
+                        }
+                    }
+                    final String b = body, e = err;
+                    runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            try {
+                                web.evaluateJavascript(
+                                    "window.__onUpdateInfo && window.__onUpdateInfo("
+                                    + org.json.JSONObject.quote(b) + ","
+                                    + org.json.JSONObject.quote(e) + ")", null);
+                            } catch (Exception ignored) {}
+                        }
+                    });
+                }
+            }).start();
+        }
+
+        @JavascriptInterface
+        public int versionCode() {
+            try {
+                return getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+            } catch (Exception e) {
+                return 0;
+            }
+        }
         @JavascriptInterface
         public void openUrl(final String url) {
             if (url == null || !(url.startsWith("http://") || url.startsWith("https://"))) return;

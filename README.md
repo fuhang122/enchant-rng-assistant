@@ -33,6 +33,16 @@
 4. **看结果**：这一档会出什么、对比建议组合、差哪几级
 5. 想要的东西刷不出来就走**刷种**分支：算还需要附魔几次、每次该投几件物品
 
+## 检查更新
+
+设置里有「检查更新」按钮，只有点它时才联网（`INTERNET` 权限仅此一处用途），平时完全离线。会依次尝试 jsDelivr、ghfast、raw.githubusercontent 三个源，读仓库根目录的 `version.json`：
+
+```json
+{"versionCode": 1, "versionName": "1.0.0", "url": "下载地址", "notes": "更新说明"}
+```
+
+发版流程：改 `version.json` 的 `versionCode`/`versionName` → 把 APK 传到 GitHub Releases → 更新 `url` → 推上去。旧版用户点一下按钮就知道有新版。
+
 ## 构建
 
 网页版（根目录的 `index.html` 就是它）：

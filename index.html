@@ -296,7 +296,9 @@ body.welcome-mode .nogain{margin-top:14px}
   <div class="setgrp">
     <div class="setlabel">关于</div>
     <button class="wbtn" id="repoBtn" style="margin-top:0">项目主页（GitHub）</button>
-    <p class="hint" style="margin:6px 0 0">源码、更新记录和在线版都在 github.com/fuhang122/enchant-rng-assistant</p>
+    <p class="hint" style="margin:6px 0 10px">源码、更新记录和在线版都在 github.com/fuhang122/enchant-rng-assistant</p>
+    <button class="wbtn" id="updBtn">检查更新</button>
+    <p class="hint" id="updMsg" style="margin:6px 0 0">平时完全离线，只有点这个按钮才联网。</p>
   </div>
   <div class="setgrp">
     <div class="setlabel">其他</div>
@@ -4023,6 +4025,54 @@ $('optWelcome').onchange = ev => {
 };
 const repoBtn = $('repoBtn');
 if (repoBtn) repoBtn.onclick = () => openExt(REPO_URL);
+
+/* 检查更新：App 内走原生桥拉 version.json，网页版用 fetch 兜底 */
+const UPD_URLS = [
+  'https://cdn.jsdelivr.net/gh/fuhang122/enchant-rng-assistant@main/version.json',
+  'https://ghfast.top/https://raw.githubusercontent.com/fuhang122/enchant-rng-assistant/main/version.json',
+  'https://raw.githubusercontent.com/fuhang122/enchant-rng-assistant/main/version.json'
+];
+function curVC() {
+  try { if (window.AndroidHost && AndroidHost.versionCode) return AndroidHost.versionCode() | 0; } catch (e) {}
+  return Number(window.__APP_VERSION_CODE) || 0;
+}
+function updMsg(t) { const el = $('updMsg'); if (el) el.textContent = t; }
+function showUpdate(info) {
+  const have = curVC();
+  if (!have) return updMsg('网页版跟着仓库走，刷新页面就是最新');
+  if (!info || typeof info.versionCode !== 'number') return updMsg('服务器返回的内容看不懂，稍后再试');
+  if (info.versionCode > have) {
+    updMsg('有新版本 ' + info.versionName);
+    if (confirm('发现新版本 ' + info.versionName + (info.notes ? '\n\n' + info.notes : '') + '\n\n去下载？')) {
+      openExt(info.url || REPO_URL);
+    }
+  } else {
+    updMsg('已是最新版本 ' + (info.versionName || ''));
+  }
+}
+window.__onUpdateInfo = function (json, err) {
+  if (!json) return updMsg('连不上更新服务器（' + (err || '网络不可用') + '）');
+  let info = null;
+  try { info = JSON.parse(json); } catch (e) { return updMsg('更新信息解析失败'); }
+  showUpdate(info);
+};
+function checkUpdate() {
+  updMsg('正在检查…');
+  try {
+    if (window.AndroidHost && AndroidHost.checkUpdate) { AndroidHost.checkUpdate(); return; }
+  } catch (e) {}
+  let i = 0;
+  const tryNext = () => {
+    if (i >= UPD_URLS.length) return updMsg('连不上更新服务器，可以去项目主页看');
+    fetch(UPD_URLS[i++], { cache: 'no-store' })
+      .then(r => { if (!r.ok) throw 0; return r.json(); })
+      .then(showUpdate)
+      .catch(tryNext);
+  };
+  tryNext();
+}
+const updBtn = $('updBtn');
+if (updBtn) updBtn.onclick = checkUpdate;
 $('resetAll').onclick = () => {
   S.obs = []; S.plan = PLAN.slice(); S.idx = 0; S.cands = null; S.seedA = S.seedB = null;
   S.state = null; S.phase = 'A'; S.finalSeed = null;
