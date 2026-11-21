@@ -1,0 +1,3367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101319">
+<title>附魔台 RNG 助手</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:#101319;color:#e7ecf3;
+ font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC",system-ui,sans-serif}
+body{padding-bottom:0}
+.wrap{max-width:720px;margin:0 auto;padding:0 12px calc(40px + var(--sab,0px))}
+.topbar{position:sticky;top:0;z-index:12;margin:0 -12px;padding:calc(var(--sat,0px) + 8px) 12px 0;
+ background:#101319;border-bottom:1px solid #232835}
+header{padding:2px 2px 7px}
+header h1{margin:0;font-size:19px;letter-spacing:.5px}
+header .sub{color:#7d8798;font-size:12px;margin-top:2px}
+.tabs{display:flex;gap:6px;padding:2px 0 8px}
+.tabs button{flex:1;padding:10px 0;white-space:nowrap;font-size:13.5px;border:1px solid #232835;background:#171b23;color:#9aa5b6;
+ border-radius:10px;font-size:14px;font-weight:600}
+.tabs button.on{background:#2a5cf4;border-color:#2a5cf4;color:#fff}
+.pane{display:none}.pane.on{display:block}
+.card{background:#171b23;border:1px solid #232835;border-radius:14px;padding:12px;margin-bottom:12px}
+.row{display:flex;align-items:center;gap:10px;margin:8px 0}
+.row>span{width:64px;color:#98a3b4;font-size:13px;flex:0 0 auto}
+.row select,.row input[type=text],.row input[type=number]{flex:1;min-width:0;background:#0e1117;color:#e7ecf3;
+ border:1px solid #2a3140;border-radius:9px;padding:10px;font-size:15px;appearance:none}
+.row input[type=range]{flex:1;accent-color:#2a5cf4;height:26px}
+.row b{width:26px;text-align:right;color:#cfd8e6;font-variant-numeric:tabular-nums}
+.row3{display:flex;gap:8px;margin:10px 0 4px}
+.row3 input{flex:1;min-width:0;background:#0e1117;color:#e7ecf3;border:1px solid #2a3140;border-radius:9px;
+ padding:12px 6px;font-size:16px;text-align:center}
+button{font-family:inherit}
+.btn{width:100%;padding:13px;border-radius:11px;border:1px solid #2a3140;background:#1e2430;color:#dbe3ef;
+ font-size:15px;font-weight:600;margin-top:10px}
+.btn.primary{background:#2a5cf4;border-color:#2a5cf4;color:#fff}
+.btn.ghost{background:#12161d}
+.btn:active{filter:brightness(1.15)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{display:flex;align-items:center;gap:6px;background:#1f2632;border:1px solid #2c3546;
+ border-radius:8px;padding:6px 8px;font-size:13px;font-variant-numeric:tabular-nums}
+.chip i{color:#7d8798;font-style:normal;font-size:11px}
+.chip span.x{color:#e0555f;font-weight:700;padding:0 2px}
+.hint{color:#7d8798;font-size:12.5px;line-height:1.5;margin:8px 0 0}
+.stat{color:#98a3b4;font-size:13px;margin-top:8px;min-height:18px;font-variant-numeric:tabular-nums}
+.bar{height:6px;background:#0e1117;border-radius:99px;overflow:hidden;margin-top:10px;border:1px solid #232835}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#2a5cf4,#59d0a4);transition:width .15s}
+.slot{background:#131722;border:1px solid #232835;border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.slot-h{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#98a3b4}
+.slot-h .lv{color:#e7ecf3;font-weight:700;font-variant-numeric:tabular-nums}
+.slot-h .tag{font-size:11px;padding:2px 6px;border-radius:6px;border:1px solid #2c3546;color:#8f9aab}
+.slot-h .tag.no{color:#e0555f;border-color:#4a2a30}
+.enl{font-size:15px;margin-top:6px;color:#dfe7f2}
+.enl.mute{color:#6b7585;font-size:13.5px}
+.prob{margin-top:8px}
+.prob div{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:13px}
+.prob .nm{flex:0 0 40%;color:#c8d2e0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.prob .pw{flex:1;height:7px;background:#0e1117;border-radius:99px;overflow:hidden}
+.prob .pw i{display:block;height:100%;background:#3d78ff}
+.prob .pv{flex:0 0 44px;text-align:right;color:#8f9aab;font-variant-numeric:tabular-nums}
+.seedbox{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.seedbox code{background:#0e1117;border:1px solid #2a3140;border-radius:8px;padding:7px 9px;font-size:14px;
+ color:#7fe3b0;font-family:ui-monospace,Menlo,monospace;word-break:break-all}
+.seedbox button{padding:8px 12px;border-radius:8px;border:1px solid #2a3140;background:#1e2430;color:#dbe3ef;font-size:13px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:7px 6px;border-bottom:1px solid #1d2330;vertical-align:top}
+th{color:#7d8798;font-weight:600;font-size:12px}
+td.n{color:#c8d2e0;font-variant-numeric:tabular-nums;white-space:nowrap}
+.k{color:#8f9aab;font-size:13px}
+h3{font-size:14px;margin:16px 0 6px;color:#cfd8e6}
+p{margin:8px 0;color:#a9b4c4;font-size:13.5px;line-height:1.65}
+ul{margin:6px 0 6px 18px;padding:0;color:#a9b4c4;font-size:13.5px;line-height:1.65}
+li{margin:4px 0}
+code.inl{background:#0e1117;border:1px solid #232835;border-radius:5px;padding:1px 5px;
+ font-family:ui-monospace,Menlo,monospace;font-size:12.5px;color:#8fd6ff}
+.warn{color:#e0a355}
+.tagok{display:inline-block;background:#123024;border:1px solid #1f5c42;color:#7fe3b0;border-radius:6px;font-size:11px;padding:1px 6px;vertical-align:1px}
+.tagbad{display:inline-block;background:#33171c;border:1px solid #5c232c;color:#ff8b96;border-radius:6px;font-size:11px;padding:1px 6px;vertical-align:1px}
+b.hl{color:#7fe3b0}
+.card ol{margin:6px 0 6px 18px;padding:0;color:#a9b4c4;font-size:13.5px;line-height:1.65}
+.card ol li{margin:4px 0}
+.nat{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;border:0;padding:0;overflow:hidden}
+.selbar{flex:1;min-width:0;display:flex;align-items:center;gap:10px;justify-content:space-between;
+ background:var(--input);border:1px solid var(--line2);border-radius:11px;padding:13px 14px;
+ color:var(--fg);font-size:15px;font-family:inherit;text-align:left}
+.selbar .tx{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.selbar .cv{color:var(--dim);font-size:13px;flex:0 0 auto}
+.selbar:active{filter:brightness(1.12)}
+.pickmask{position:fixed;left:0;right:0;top:0;bottom:0;background:rgba(0,0,0,.55);z-index:70;
+ opacity:0;pointer-events:none;transition:opacity .18s}
+.pickmask.on{opacity:1;pointer-events:auto}
+.pickpanel{position:fixed;left:0;right:0;bottom:0;z-index:71;background:var(--card);
+ border-top:1px solid var(--line2);border-radius:20px 20px 0 0;
+ max-height:78vh;display:flex;flex-direction:column;
+ padding:14px 14px calc(14px + var(--sab,0px) + env(safe-area-inset-bottom));
+ transform:translateY(101%);transition:transform .22s cubic-bezier(.2,.9,.3,1)}
+.pickpanel.on{transform:translateY(0)}
+.pickhead{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px}
+.pickhead b{font-size:15px;font-weight:800}
+.pickhead button{background:none;border:0;color:var(--dim);font-size:22px;line-height:1;padding:0 4px;font-family:inherit}
+.pkfind{width:100%;box-sizing:border-box;background:var(--input);border:1px solid var(--line2);border-radius:10px;
+ padding:12px;color:var(--fg);font-size:15px;font-family:inherit;margin:0 0 8px}
+.pkbody{overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;flex:1 1 auto;min-height:0}
+.pkgroup{color:var(--dim);font-size:11.5px;letter-spacing:.4px;margin:12px 6px 4px}
+.pickitem{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);
+ color:var(--fg);font-size:15px;font-family:inherit;padding:14px 8px}
+.pickitem.on{color:var(--accent);font-weight:700}
+.pickitem:last-child{border-bottom:0}
+.pickitem:active{background:var(--card2)}
+
+/* 左上角返回按钮（教程页 / 标签版共用） */
+.backbtn{display:inline-flex;align-items:center;gap:3px;padding:8px 14px 8px 11px;border-radius:999px;
+ background:var(--card,#1b2029);border:1px solid var(--line,#262d3a);color:var(--fg,#e7ecf3);
+ font:inherit;font-size:13.5px;line-height:1;text-decoration:none;cursor:pointer;
+ -webkit-tap-highlight-color:transparent}
+.backbtn:active{transform:scale(.96);filter:brightness(1.18)}
+.backbtn .arw{font-size:17px;margin:-2px 1px 0 -2px;opacity:.85}
+.backbtn.fix{position:fixed;left:12px;top:calc(8px + var(--sat,0px));z-index:60;
+ box-shadow:0 3px 12px rgba(0,0,0,.32)}
+.backrow{margin:0 0 7px}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="topbar">
+<div class="backrow"><a class="backbtn" id="backBtn" href="index.html"><span class="arw">‹</span>返回</a></div>
+<header>
+  <h1>附魔台 RNG 助手</h1>
+  <div class="sub">Minecraft Java 1.21 · XpSeed 预测 / 破解 · 全程离线</div>
+</header>
+<nav class="tabs" id="tabs">
+  <button data-tab="predict" class="on">预测</button>
+  <button data-tab="crack">破解</button>
+  <button data-tab="chain">刷种</button>
+  <button data-tab="help">说明</button>
+  <button data-tab="tut">教程</button>
+</nav>
+<main>
+<section id="p-predict" class="pane on">
+  <div class="card">
+    <div class="row"><span>物品</span><select id="pitem" class="nat"></select><button class="selbar" type="button" data-pick="pitem" data-title="物品"><span class="tx"></span><span class="cv">▾</span></button></div>
+    <label class="row"><span>书架</span><input id="pshelf" type="range" min="0" max="15" step="1" value="15"><b id="pshelfv">15</b></label>
+    <label class="row"><span>XpSeed</span><input id="pseed" type="text" inputmode="numeric" placeholder="留空 = 概率模拟"></label>
+    <button class="btn primary" id="pgo">计算</button>
+    <p class="hint">填了 XpSeed 就是三档的精确结果；留空则按 2 万次随机种子模拟出每档的出现概率。</p>
+  </div>
+  <div id="pout"></div>
+</section>
+
+<section id="p-crack" class="pane">
+  <div class="card">
+    <p class="hint" style="margin-top:0">把物品放上附魔台，记下三档显示的花费等级。同一个 XpSeed 下，改变周围书架数量可以再记一组（数字会变，但种子不变）。记满 6 组（如 15/13/10/6/3/0）时几乎一次就能锁定。</p>
+    <div class="row"><span>书架</span><select id="cshelf" class="nat"></select><button class="selbar" type="button" data-pick="cshelf" data-title="书架"><span class="tx"></span><span class="cv">▾</span></button></div>
+    <div class="row3">
+      <input id="c0" type="number" inputmode="numeric" placeholder="上档">
+      <input id="c1" type="number" inputmode="numeric" placeholder="中档">
+      <input id="c2" type="number" inputmode="numeric" placeholder="下档">
+    </div>
+    <button class="btn" id="cadd">添加这组观测</button>
+    <div id="clist" class="chips"></div>
+    <div class="row" style="margin-top:14px"><span>物品</span><select id="citem" class="nat"></select><button class="selbar" type="button" data-pick="citem" data-title="物品"><span class="tx"></span><span class="cv">▾</span></button></div>
+    <div class="row"><span>展现书架</span><select id="cshelf2" class="nat"></select><button class="selbar" type="button" data-pick="cshelf2" data-title="展现书架"><span class="tx"></span><span class="cv">▾</span></button></div>
+    <button class="btn primary" id="crun">开始破解</button>
+    <button class="btn ghost" id="cstop">停止扫描</button>
+    <div class="bar"><i id="cbar"></i></div>
+    <div class="stat" id="cstat"></div>
+  </div>
+  <div id="cout"></div>
+</section>
+
+<section id="p-chain" class="pane">
+  <div class="card">
+    <label class="row"><span>种子 A</span><input id="s1" type="text" inputmode="numeric" placeholder="第一次破解得到的种子"></label>
+    <label class="row"><span>种子 B</span><input id="s2" type="text" inputmode="numeric" placeholder="附魔一次后再破解得到的种子"></label>
+    <div class="row"><span>物品</span><select id="sitem" class="nat"></select><button class="selbar" type="button" data-pick="sitem" data-title="物品"><span class="tx"></span><span class="cv">▾</span></button></div>
+    <label class="row"><span>书架</span><input id="sshelf" type="range" min="0" max="15" step="1" value="15"><b id="sshelfv">15</b></label>
+    <button class="btn primary" id="sgo">求解随机数状态</button>
+    <p class="hint">种子 B 必须是种子 A 的下一个 <code class="inl">nextInt()</code>：也就是附魔一次之后、不做任何其他动作再破解一次。两者相邻才能反推出玩家随机数的 48 位内部状态，从而推算之后的每一次附魔。</p>
+  </div>
+  <div id="sout"></div>
+</section>
+
+<section id="p-help" class="pane">
+  <div class="card">
+    <h3>它是怎么运作的</h3>
+    <p>Java 版附魔台的结果不是当场随机掷出来的，而是由玩家存档里的 <code class="inl">XpSeed</code>（32 位整数）决定的。同一个种子在同一书架数量下，只要物品的附魔能力和可用附魔集合相同，三个选项就完全固定 —— 所以先看清、再决定要不要附魔。</p>
+    <p>三档显示的花费等级是这样算出来的：对每一档连续取两个随机数，
+      <code class="inl">i = nextInt(8) + 1 + 书架/2 + nextInt(书架+1)</code>，再按档位换算。三个档位一共用掉 6 个随机数，随后每一档再用 <code class="inl">XpSeed + 档位</code> 重新播种，独立生成附魔列表。</p>
+    <p>反过来，只要记下不同书架数量下的三档数字，就能在大约 43 亿个种子里筛出符合的那一个 —— 这就是「破解」。一般 3~4 组不同书架数的观测就能锁定唯一解。</p>
+    <h3>破解的注意点</h3>
+    <ul>
+      <li>记录时三档数字必须是同一个种子下的，也就是中途别附魔、别换物品种类。</li>
+      <li><b>别疾跑、别挖方块、别合成、别丢东西</b>：这些动作会推进玩家随机数（疾跑最容易被忽略）。为了改书架数而放/挖方块是例外。</li>
+      <li>书架数量要准确（被方块挡住的书架不计入），最多 15。</li>
+      <li>数字填你看到的等级花费；某档灰色/不可选就填 0。</li>
+      <li>一组观测不够：3 组不同书架数（例如 15、10、6）通常能筛到 1~2 个候选，再加第 4 组立刻唯一。</li>
+      <li>服务器装了改附魔台逻辑的插件时结果会不符，此时破不出来。</li>
+    </ul>
+    <h3>刷种（附魔顺序）</h3>
+    <p>附魔一次，种子就换成玩家随机数的下一个 <code class="inl">nextInt()</code>。连续两次破解得到相邻的两个种子后，就能反推玩家随机数的 48 位状态，并且知道「投掉 n 件物品再附魔」会换成哪个种子 —— 每投出一件物品会消耗 4 次 <code class="inl">nextFloat()</code>。于是可以提前算好：投几件、第几档，就能拿到想要的附魔。</p>
+    <p class="warn">前提是中途别做其他消耗玩家随机数的动作（吃东西的粒子、暴击、钓鱼等），否则序列会错位。它按原版 1.21 行为推导。</p>
+    <h3>数据与算法</h3>
+    <ul>
+      <li>附魔数据取自 26.3 原版数据包，并与 1.21.4–1.21.10 逐字段核对过（36 个非宝物附魔的权重、等级花费区间、可用物品、互斥组）；1.21.9 的铜制装备、1.21.11 的长矛与突刺附魔均已包含。</li>
+      <li>随机数按 <code class="inl">java.util.Random</code> 线性同余实现，等级公式与 <code class="inl">EnchantmentHelper.generateEnchantments</code> 已逐条复刻。</li>
+      <li>多附魔的连续判定按 (剩余等级+1)/50 的概率继续，等级减半；概率结果由模拟得出，与实操可能有极小误差。</li>
+      <li>同一档里附魔的挑选顺序按原版注册顺序（字母序），1.20 及更早的版本可能出现个别差异。</li>
+    </ul>
+    <p class="hint">本工具只是离线计算器，不改游戏文件、不连服务器。</p>
+  </div>
+</section>
+
+<section id="p-tut" class="pane">
+<div class="card">
+  <h3 style="margin-top:0">五分钟速通版</h3>
+  <ol>
+    <li><b>摆好 15 书架</b>，把想附魔的物品放上台子，记下三档数字（例如 <code class="inl">6 / 11 / 30</code>）。</li>
+    <li><b>改书架数量</b>（挡掉几个），再记一组。凑到 6 组：15、13、10、6、3、0。</li>
+    <li>App 的<b>破解</b>页逐组录入 → 开始破解（手机约 20~60 秒）→ 得到唯一的 <code class="inl">XpSeed</code>。</li>
+    <li>同一页会显示这个种子下三档<b>真正会给什么附魔</b>。想要就直接附魔；不想要见第 6 节「刷种」。</li>
+  </ol>
+  </div>
+
+<div class="card" id="s1">
+  <h3 style="margin-top:0">1. 原理：为什么能提前知道结果</h3>
+  <p><b>结论先说：</b>Java 版附魔台给什么附魔，完全由一个 32 位整数 <code class="inl">XpSeed</code> 决定。这个数字存在你的玩家数据里，附魔一次就换一个新的。知道它，就等于知道这次、下次、下下次会出什么。</p>
+  <h3>1.1 三档数字是怎么来的</h3>
+  <p>打开界面时，游戏对第 1、2、3 档各调用两次随机数：</p>
+  <p><code class="inl">i = nextInt(8) + 1 + ⌊书架/2⌋ + nextInt(书架+1)</code></p>
+  <p>然后换算成你看到的花费：</p>
+  <ul>
+    <li>第 1 档 = max(⌊i/3⌋, 1)</li>
+    <li>第 2 档 = ⌊i×2/3⌋ + 1</li>
+    <li>第 3 档 = max(i, 书架×2)</li>
+  </ul>
+  <p>三档一共用掉 6 个随机数，全都由 <code class="inl">XpSeed</code> 播种而来。<span class="tagok">关键</span> 所以在同一个种子下，改书架数量只会改变数字，不会改变种子。</p>
+  <h3>1.2 附魔列表是怎么来的</h3>
+  <p>每一档再单独用 <code class="inl">XpSeed + 档位</code> 重新播种，独立生成附魔列表：先按物品的「附魔能力」把花费微调一下（<code class="inl">eCost</code>），再从「这件物品能出、且等级花费区间盖住 eCost」的附魔里按权重抽，抽中后把互斥的踢掉，然后按概率决定要不要再来一条、等级减半。</p>
+  <p>所以：<b>等级数字只取决于种子 + 书架数</b>；<b>附魔内容取决于种子 + 物品</b>。同一种子下，钻石剑和钻石镐的第 3 档数字都是 30，但给出的附魔完全不同。</p>
+  <h3>1.3 反向操作就是「破解」</h3>
+  <p>三档数字等于把种子的若干位泄露出来。一组观测能砍掉绝大部分种子，但还剩上千万个候选；不同书架数下的几组观测叠起来，就能把 43 亿个种子筛到只剩 1 个 —— 这就是 App 做的事（穷举 + 提前退出，多线程跑）。</p>
+  <h3>1.4 附魔一次，种子就换</h3>
+  <p>附魔消耗的是玩家随机数的<b>下一个</b> <code class="inl">nextInt()</code> 作为新种子。知道玩家随机数的 48 位内部状态，就能算出之后每一次附魔的种子 —— 这就是「刷种」，详见第 6 节。</p>
+</div>
+
+<div class="card" id="s2">
+  <h3 style="margin-top:0">2. 准备工作</h3>
+  <h3>2.0 需要准备的东西</h3>
+  <table>
+    <tr><th>物品</th><th>为什么</th></tr>
+    <tr><td>附魔台 ×1</td><td>放在 15 个书架中间，台子与书架之间那一格要空</td></tr>
+    <tr><td>书架 ×15</td><td>要能临时堵掉几个，别摆成没法动的形状</td></tr>
+    <tr><td>精准采集斧 ×1</td><td>搬书架用；<b>别带耐久附魔</b> —— 耐久触发时要掷随机数，可能打乱玩家随机数序列</td></tr>
+    <tr><td>祭品 ×3~5</td><td>能附魔的垃圾（木剑、书），刷种时用来消耗一次附魔换种子</td></tr>
+    <tr><td>经验 ≥ 30 级</td><td>第 3 档要 30 级；建议 40~60 级，可能要试几次</td></tr>
+    <tr><td>可丢弃物品 ×8 以上</td><td>刷种时按 Q 一件件投，用来对准投掷表某一行</td></tr>
+    <tr><td>方块若干</td><td>堵书架用：放在书架与台子之间那一格就失效一个</td></tr>
+  </table>
+  <p class="warn">从开始记数字到点下附魔，这些动作一律别做：<b>疾跑（冲刺）</b>、点任何一档附魔、换物品、挖方块、合成（含背包 2×2）、丢弃物品、吃东西、钓鱼、打架、开箱子、离开世界。
+  依据：社区实测表明 XP 种子会随玩家的<b>冲刺、挖掘、合成、丢弃</b>等动作推进，序列一旦错位，后面的推算全作废。</p>
+  <p class="hint">唯一的例外是<b>为了改变书架数量去放/挖方块</b>：它只改屏幕上的等级数字，不会换掉当前的种子 —— 所以「记录 6 组」这个流程本身是成立的。</p>
+  <h3>2.1 书架要能数得准</h3>
+  <p>Java 版规则：书架距台子<b>水平 2 格</b>（一个方向 2 格、另一个方向 0~2 格），高度与台子相同或高一格，并且台子和书架之间那一格必须是空气/雪/矮草这类可穿透方块。<b>最多生效 15 个</b>，多的不算。</p>
+  <p><span class="tagok">最快验证法</span> 打开附魔界面时，会有一批蓝白色粒子从有效书架飞向台子。<b>数粒子个数就是有效书架数</b>，比手数可靠。</p>
+  <p><span class="tagok">另一个判据</span> 书架为 15 时，第 3 档必定显示 <code class="inl">30</code>。看到 30 基本说明吃满 15 个。</p>
+  <h3>2.2 怎么临时改书架数量</h3>
+  <p>站在台子边，把书架和台子之间那一格用方块堵住（圆石、泥土都行），这个书架立刻失效，数量 -1；拆掉方块就恢复。想一次减好几个就堵几个。全程<b>不要动台子上的物品</b>，种子就不变。</p>
+  <p>也可以直接把书架打掉/搬走，但注意 15 → 0 要拆很多；用堵的办法更省事。</p>
+  <h3>2.3 选对物品</h3>
+  <p>记录观测时用什么物品都行（银鱼？不，用你真正想附魔的那件最好），但注意两点：</p>
+  <ul>
+    <li><b>等级数字与物品无关</b>，只与种子和书架数有关。所以你可以先拿一把木剑试探，最后再换目标物品 —— 只要中途没有附魔过。</li>
+    <li><b>附魔内容与物品强相关</b>。破解出来的三档附魔，只对「当时台子上那件物品」有效。App 里选错物品，看到的附魔就是错的。</li>
+  </ul>
+  <p>各材质附魔能力（影响 eCost，进而影响附魔等级高低）：金 25/22、皮革 15、下界合金 15、木 15、铁工具 14、铜 13、锁链 12、钻石 10、铁甲/海龟壳 9、石 5、书/弓/弩/三叉戟/钓鱼竿 1。</p>
+  <h3>2.4 一次只能规划一次附魔</h3>
+  <p>观测必须来自「还没附魔」的当前状态。一旦附魔，种子变了，之前的观测全部作废，要重新记。所以流程永远是：<b>先观察 → 破解 → 再决定附魔</b>。</p>
+</div>
+
+<div class="card" id="s3">
+  <h3 style="margin-top:0">3. 记录观测（最关键的一步）</h3>
+  <h3>3.1 记什么</h3>
+  <p>每组观测 = <b>书架数量 + 三档数字</b>。某档灰掉/不可选就填 <code class="inl">0</code>。</p>
+  <p>第 3 档在书架少的时候也能看到数字（比如 0 书架时是 1~8），照实填。</p>
+  <h3>3.2 建议记 6 组</h3>
+  <p>书架数越分散越好，下面这组是实测比较稳的组合：<b>15 / 13 / 10 / 6 / 3 / 0</b>。候选数量随组数下降得很快（实测，同一颗种子）：</p>
+  <table>
+    <tr><th>观测组数</th><th>剩余候选</th><th>能不能直接定案</th></tr>
+    <tr><td class="n">1 组</td><td class="n">约 1 亿</td><td><span class="tagbad">不行</span></td></tr>
+    <tr><td class="n">2 组</td><td class="n">约 200 万</td><td><span class="tagbad">不行</span></td></tr>
+    <tr><td class="n">3 组</td><td class="n">约 1.3 万</td><td><span class="tagbad">不行</span></td></tr>
+    <tr><td class="n">4 组</td><td class="n">约 800</td><td><span class="tagbad">不够</span></td></tr>
+    <tr><td class="n">5 组</td><td class="n">约 130</td><td>接近</td></tr>
+    <tr><td class="n">6 组</td><td class="n">1 个</td><td><span class="tagok">定案</span></td></tr>
+  </table>
+  <p class="hint">候选多于 1 个也不用重扫：在 App 里再加一组观测，会立刻把候选筛掉（毫秒级）。</p>
+  <h3>3.3 示例（下面这套数字是真实可复现的）</h3>
+  <table>
+    <tr><th>书架</th><th>上档</th><th>中档</th><th>下档</th></tr>
+    <tr><td class="n">15</td><td class="n">6</td><td class="n">11</td><td class="n">30</td></tr>
+    <tr><td class="n">13</td><td class="n">3</td><td class="n">11</td><td class="n">26</td></tr>
+    <tr><td class="n">10</td><td class="n">3</td><td class="n">13</td><td class="n">20</td></tr>
+    <tr><td class="n">6</td><td class="n">2</td><td class="n">9</td><td class="n">14</td></tr>
+    <tr><td class="n">3</td><td class="n">2</td><td class="n">7</td><td class="n">9</td></tr>
+    <tr><td class="n">0</td><td class="n">1</td><td class="n">6</td><td class="n">5</td></tr>
+  </table>
+  <p>这六组唯一对应种子 <code class="inl">63552300</code>。注意第 3 档随着书架减少从 30 一路降到 5 —— 这就是它能提供信息的原因（15 书架时第 3 档永远是 30，一点信息都没有）。</p>
+  <h3>3.4 记录时的纪律</h3>
+  <ul>
+    <li>中途<b>不要附魔</b>（包括点错档位）。</li>
+    <li>中途<b>不要换物品</b>：把物品拿下来再放，种子不变，但别换成别的物品后忘了换回来。</li>
+    <li>书架数要准确，宁可多确认一次粒子数。</li>
+    <li>记录顺序随意，App 会按你选的书架数自动对应。</li>
+  </ul>
+</div>
+
+<div class="card" id="s4">
+  <h3 style="margin-top:0">4. 破解</h3>
+  <h3>4.1 操作</h3>
+  <ol>
+    <li>进入 App 的<b>破解</b>页。</li>
+    <li>选书架数 → 填三档数字 → 点「添加这组观测」。重复到 6 组。</li>
+    <li>下面的「物品」选你台子上那件东西（决定最终显示哪些附魔），「展现书架」选你打算附魔时的书架数（通常 15）。</li>
+    <li>点「开始破解」。进度条走完通常 20~60 秒（手机浏览器会给 4~6 个线程）。</li>
+    <li>命中 1 个候选 → 直接显示 <code class="inl">XpSeed</code> 和三档真实结果。</li>
+  </ol>
+  <h3>4.2 命中的三种情况</h3>
+  <ul>
+    <li><b>1 个候选</b>：成功。种子可点「复制」，也可以点「填入刷种页的种子 A」。</li>
+    <li><b>几个到几百个</b>：正常。再加一组不同书架数的观测，候选会被立即筛掉（不用重扫）。</li>
+    <li><b>0 个</b>：观测之间自相矛盾。常见原因：数字记错、书架数算错（粒子数没数对）、中途附魔过、服务器改了附魔台逻辑。</li>
+  </ul>
+  <h3>4.3 如果服务器有插件</h3>
+  <p>原版才有这套逻辑。装了改附魔台/改随机数的插件（或数据包改附魔定义）就会出现「怎么记都破不出来」。原版生存服、单人存档都能用。</p>
+</div>
+
+<div class="card" id="s5">
+  <h3 style="margin-top:0">5. 读懂三档结果</h3>
+  <p>以种子 <code class="inl">63552300</code>、钻石镐、15 书架为例，App 会显示：</p>
+  <table>
+    <tr><th>档位</th><th>需要</th><th>会给的附魔</th></tr>
+    <tr><td class="n">第 1 档</td><td class="n">6 级</td><td>耐久 I、效率 I</td></tr>
+    <tr><td class="n">第 2 档</td><td class="n">11 级</td><td>效率 II、耐久 II</td></tr>
+    <tr><td class="n">第 3 档</td><td class="n">30 级</td><td><b class="hl">效率 IV、时运 III、耐久 III</b></td></tr>
+  </table>
+  <p>同一颗种子换成钻石剑，等级数字一模一样（6 / 11 / 30），但内容是：锋利 I + 横扫之刃 I / 耐久 II + 节肢杀手 II + 横扫之刃 I / 亡灵杀手 IV + 击退 II + 耐久 III。同一颗种子换成一本书（附魔书）：密度 I / 击退 I + 摔落保护 II / 击退 II + 保护 III —— 书能出所有非宝物附魔，所以内容又多又杂。</p>
+  <h3>5.1 「不可选」是什么意思</h3>
+  <p>某档要求的花费等级低于该档序号（比如第 2 档只需要 1 级）时，游戏不会让你选它，App 会标「不可选」。想让它可用，就调整书架数量或换个附魔能力更低/更高的物品。</p>
+  <h3>5.2 等级不够怎么办</h3>
+  <ul>
+    <li>先升到 30 级再附魔，别浪费。</li>
+    <li>或者减少书架数让第 3 档变便宜 —— 但附魔也会变弱（eCost 跟着变），通常不值得。</li>
+    <li>材质会改变结果：金的附魔能力最高，同一档更容易出高等级附魔（但金装备耐久差）。</li>
+  </ul>
+  <h3>5.3 想要的经验修补？</h3>
+  <p>台子出不了。经验修补、灵魂疾行、迅捷潜行、冰霜行者、风爆、两个诅咒都属于宝物附魔，不出现在附魔台里，只能靠箱子/钓鱼/村民/铁砧。App 的候选集里也只有 36 个非宝物附魔（含突刺）。</p>
+</div>
+
+<div class="card" id="s6">
+  <h3 style="margin-top:0">6. 刷种：把「下一次」也算出来</h3>
+  <h3>6.1 先理解两件事</h3>
+  <ul>
+    <li><b>附魔一次</b> = 玩家随机数消耗 1 次 <code class="inl">nextInt()</code>（新种子就是它的输出）。</li>
+    <li><b>投掉一件物品</b>（按 Q）= 消耗 4 次 <code class="inl">nextFloat()</code>。</li>
+  </ul>
+  <p>所以「先投掉 n 件物品，再附魔」用的种子是可以提前算出来的。<span class="tagok">关键</span> 只要中间不做别的消耗玩家随机数的动作。</p>
+  <h3>6.2 怎么拿到相邻的两个种子</h3>
+  <ol>
+    <li>破解 → 得到种子 <b>A</b>（当前这次附魔会用的种子）。</li>
+    <li>随便附魔一件东西（哪怕是木剑，或者干脆接受这次附魔），种子自动变成 B。</li>
+    <li>重新记 6 组观测、再破解一次 → 得到种子 <b>B</b>。</li>
+    <li>App 的<b>刷种</b>页填 A 和 B，点「求解随机数状态」。</li>
+  </ol>
+  <p>A、B 必须是紧邻的两次输出（中间只发生了一次附魔）。如果提示求解失败，说明中间有别的动作插进来了。</p>
+  <h3>6.3 示例（真实数字）</h3>
+  <p>假设破解得到 A = 3302031503，附魔一次后再破解得到 B = 437421052。App 解出玩家随机数状态 <code class="inl">1A1283FC0014</code>，然后给出钻石镐 + 15 书架的表：</p>
+  <table>
+    <tr><th>投掉</th><th>种子</th><th>第 3 档会给</th></tr>
+    <tr><td class="n">0 件</td><td class="n">4047242446</td><td>效率 IV</td></tr>
+    <tr><td class="n">1 件</td><td class="n">2129447227</td><td>效率 IV、耐久 III</td></tr>
+    <tr><td class="n">2 件</td><td class="n">63552300</td><td><b class="hl">效率 IV、时运 III、耐久 III</b></td></tr>
+    <tr><td class="n">3 件</td><td class="n">814169357</td><td>效率 IV</td></tr>
+    <tr><td class="n">4 件</td><td class="n">2184578844</td><td>效率 III、耐久 III</td></tr>
+  </table>
+  <p>于是操作就是：投 2 件东西 → 放上钻石镐 → 界面第 3 档应该显示 30 级、内容是效率 IV + 时运 III + 耐久 III → 附魔。</p>
+  <h3>6.4 自检：用数字对答案</h3>
+  <p>表里每一档都标了「需 N 级」。进游戏后三档显示的等级应该和表里完全一致。一致 → 状态没错位，可以放心附魔；不一致 → 中途有别的动作消耗了随机数，重新破解。</p>
+  <h3>6.5 一旦状态确定，可以连着规划好几次</h3>
+  <p>附魔只消耗 1 次 nextInt，所以第 2 次、第 3 次附魔的种子也能顺着算下去（表里每个「投掉 n 件」其实都可以继续往后推）。真正容易出错的是那些不显眼的随机数消耗，所以<b>每步都用三档数字核对</b>。</p>
+  <p class="warn">别做这些：投掷、钓鱼、吃东西/喝药水（某些粒子与行为会用玩家随机数）、暴击、经验修补触发等。安全做法：规划 → 附魔 → 立刻核对下一步数字。</p>
+</div>
+
+<div class="card" id="s7">
+  <h3 style="margin-top:0">7. 两个实战剧本</h3>
+  <h3>剧本 A：这次就有，直接拿</h3>
+  <ol>
+    <li>背包里有 <b>30 级</b>，摆 15 书架，放上钻石镐。看到 <code class="inl">6 / 11 / 30</code>。</li>
+    <li>按第 3 节记满 6 组（15/13/10/6/3/0）。</li>
+    <li>破解 → 种子 <code class="inl">63552300</code> → 第 3 档：<b>效率 IV + 时运 III + 耐久 III</b>。</li>
+    <li>就是它，点第 3 档。完事。</li>
+  </ol>
+  <h3>剧本 B：这次不行，靠投票刷</h3>
+  <ol>
+    <li>破解得到种子 A，三档全是垃圾。</li>
+    <li>先附魔一把木剑（或者干脆把这次机会用掉），拿到种子 B：重新记 6 组、再破解。</li>
+    <li>刷种页填 A、B → 看哪一行投 n 件后出目标附魔，比如「投 2 件 → 效率 IV + 时运 III + 耐久 III」。</li>
+    <li>投掉 2 件垃圾物品 → 放上钻石镐 → 核对三档数字（应为 6 / 11 / 30）→ 附魔。</li>
+  </ol>
+  <p class="hint">注意每次附魔都会换种子，所以剧本 B 里「先附魔一次拿 B」这一步是有代价的。想少浪费，第一次就先拿便宜物品（书、木剑）试水。</p>
+</div>
+
+<div class="card" id="s8">
+  <h3 style="margin-top:0">8. 常见问题</h3>
+  <p><b>Q：破解 0 个候选？</b><br>按这个顺序查：三档数字是否同一时刻、书架数是否数对（粒子计数）、中途有没有附魔过、物品有没有换过。都正常还破不出来，基本就是服务器/数据包改了附魔逻辑。</p>
+  <p><b>Q：候选几百个怎么办？</b><br>加一组新书架数的观测，候选立刻被筛掉，不用重扫。</p>
+  <p><b>Q：提示「候选太多」？</b><br>观测少于 3 组。至少 3 组，建议 6 组。</p>
+  <p><b>Q：为什么我的镐出不了锋利？某件物品到底能吃哪些附魔？</b><br>
+  台子只按「物品的可附魔标签」筛：锋利/亡灵/节肢只作用于剑、斧、长矛这一系，镐子只有效率、耐久、时运、精准采集。
+  开 App 右上角的<b>「附魔表」</b>，选物品就能看到「能出」和「吃不到（附原因）」两张清单。</p>
+  <p><b>Q：为什么第 3 档总是 30？</b><br>15 书架时第 3 档 = max(i, 30) = 30，永远是 30。所以它不含信息，靠改书架数量拿其它数字。</p>
+  <p><b>Q：App 显示的附魔和游戏里不一样？</b><br>游戏里根本不显示附魔名（只有银河字母）。先确认物品选对、书架选对、种子没变。</p>
+  <p><b>Q：刷种提示「不是相邻的 nextInt 输出」？</b><br>A、B 之间除了那一次附魔还有别的动作，或者你填反了顺序。A 必须是先出现的那个。</p>
+  <p><b>Q：数字核对不上，但上次明明是对的？</b><br>中途有动作消耗了玩家随机数。重新记 6 组、重新破解一次即可。</p>
+  <p><b>Q：附魔书能用这套吗？</b><br>能。物品选「书（附魔书）」，书能出所有非宝物附魔，内容最杂；同一颗种子下书的附魔和剑完全不同。</p>
+  <p><b>Q：不同版本都能用吗？</b><br>数据按 1.21.4 原版取。1.20 及更早的附魔挑选顺序略有差异，个别附魔可能出现不同结果；未来版本若改了附魔台逻辑可能整体失效。</p>
+  <p><b>Q：会不会封号 / 算作弊？</b><br>App 只是个离线计算器，不连服务器、不改游戏文件。它利用的是原版随机数可预测这一特性，判断标准由各服务器自己定。</p>
+</div>
+
+<div class="card">
+  <h3 style="margin-top:0">附：术语与数据</h3>
+  <ul>
+    <li><code class="inl">XpSeed</code>：玩家数据里的 32 位附魔种子，附魔后重掷。</li>
+    <li><code class="inl">eCost</code>：附魔花费（内部值），先按附魔能力微调，再决定能出哪些等级的附魔。</li>
+    <li><code class="inl">nextInt / nextFloat</code>：<code class="inl">java.util.Random</code> 的取数方法，本工具按原版实现复刻。</li>
+    <li>附魔数据：26.3 原版数据包（与 1.21.4–1.21.10 逐字段核对一致），36 个非宝物附魔的权重、等级花费区间、可用物品、互斥组；1.21.9 的铜制装备、1.21.11 的长矛与突刺已包含。</li>
+    <li>多附魔判定：按 (剩余等级+1)/50 继续、等级减半；概率为 2 万次模拟结果，可能有极小误差。</li>
+  </ul></div>
+</section>
+</main>
+</div>
+<script id="engine" type="text/plain">
+/* ===== Minecraft Java 附魔台 RNG 引擎（1.21.x vanilla 行为） ===== */
+(function (root) {
+'use strict';
+const DATA = {
+"items": [
+{
+"key": "wooden_sword",
+"name": "木剑",
+"en": 15,
+"tags": [
+"sword",
+"melee_weapon",
+"sharp_weapon",
+"weapon",
+"durability",
+"fire_aspect",
+"vanishing"
+],
+"group": "剑"
+},
+{
+"key": "stone_sword",
+"name": "石剑",
+"en": 5,
+"tags": [
+"sword",
+"melee_weapon",
+"sharp_weapon",
+"weapon",
+"durability",
+"fire_aspect",
+"vanishing"
+],
+"group": "剑"
+},
+{
+"key": "copper_sword",
+"name": "铜剑",
+"en": 13,
+"tags": [
+"sword",
+"melee_weapon",
+"sharp_weapon",
+"weapon",
+"durability",
+"fire_aspect",
+"vanishing"
+],
+"group": "剑"
+},
+{
+"key": "iron_sword",
+"name": "铁剑",
+"en": 14,
+"tags": [
+"sword",
+"melee_weapon",
+"sharp_weapon",
+"weapon",
+"durability",
+"fire_aspect",
+"vanishing"
+],
+"group": "剑"
+},
+{
+"key": "golden_sword",
+"name": "金剑",
+"en": 22,
+"tags": [
+"sword",
+"melee_weapon",
+"sharp_weapon",
+"weapon",
+"durability",
+"fire_aspect",
+"vanishing"
+],
+"group": "剑"
+},
+{
+"key": "diamond_sword",
+"name": "钻石剑",
+"en": 10,
+"tags": [
+"sword",
+"melee_weapon",
+"sharp_weapon",
+"weapon",
+"durability",
+"fire_aspect",
+"vanishing"
+],
+"group": "剑"
+},
+{
+"key": "netherite_sword",
+"name": "下界合金剑",
+"en": 15,
+"tags": [
+"sword",
+"melee_weapon",
+"sharp_weapon",
+"weapon",
+"durability",
+"fire_aspect",
+"vanishing"
+],
+"group": "剑"
+},
+{
+"key": "wooden_axe",
+"name": "木斧",
+"en": 15,
+"tags": [
+"axe",
+"mining",
+"mining_loot",
+"sharp_weapon",
+"weapon",
+"durability",
+"vanishing"
+],
+"group": "斧"
+},
+{
+"key": "stone_axe",
+"name": "石斧",
+"en": 5,
+"tags": [
+"axe",
+"mining",
+"mining_loot",
+"sharp_weapon",
+"weapon",
+"durability",
+"vanishing"
+],
+"group": "斧"
+},
+{
+"key": "copper_axe",
+"name": "铜斧",
+"en": 13,
+"tags": [
+"axe",
+"mining",
+"mining_loot",
+"sharp_weapon",
+"weapon",
+"durability",
+"vanishing"
+],
+"group": "斧"
+},
+{
+"key": "iron_axe",
+"name": "铁斧",
+"en": 14,
+"tags": [
+"axe",
+"mining",
+"mining_loot",
+"sharp_weapon",
+"weapon",
+"durability",
+"vanishing"
+],
+"group": "斧"
+},
+{
+"key": "golden_axe",
+"name": "金斧",
+"en": 22,
+"tags": [
+"axe",
+"mining",
+"mining_loot",
+"sharp_weapon",
+"weapon",
+"durability",
+"vanishing"
+],
+"group": "斧"
+},
+{
+"key": "diamond_axe",
+"name": "钻石斧",
+"en": 10,
+"tags": [
+"axe",
+"mining",
+"mining_loot",
+"sharp_weapon",
+"weapon",
+"durability",
+"vanishing"
+],
+"group": "斧"
+},
+{
+"key": "netherite_axe",
+"name": "下界合金斧",
+"en": 15,
+"tags": [
+"axe",
+"mining",
+"mining_loot",
+"sharp_weapon",
+"weapon",
+"durability",
+"vanishing"
+],
+"group": "斧"
+},
+{
+"key": "wooden_pickaxe",
+"name": "木镐",
+"en": 15,
+"tags": [
+"pickaxe",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "镐"
+},
+{
+"key": "stone_pickaxe",
+"name": "石镐",
+"en": 5,
+"tags": [
+"pickaxe",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "镐"
+},
+{
+"key": "copper_pickaxe",
+"name": "铜镐",
+"en": 13,
+"tags": [
+"pickaxe",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "镐"
+},
+{
+"key": "iron_pickaxe",
+"name": "铁镐",
+"en": 14,
+"tags": [
+"pickaxe",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "镐"
+},
+{
+"key": "golden_pickaxe",
+"name": "金镐",
+"en": 22,
+"tags": [
+"pickaxe",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "镐"
+},
+{
+"key": "diamond_pickaxe",
+"name": "钻石镐",
+"en": 10,
+"tags": [
+"pickaxe",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "镐"
+},
+{
+"key": "netherite_pickaxe",
+"name": "下界合金镐",
+"en": 15,
+"tags": [
+"pickaxe",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "镐"
+},
+{
+"key": "wooden_shovel",
+"name": "木锹",
+"en": 15,
+"tags": [
+"shovel",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "锹"
+},
+{
+"key": "stone_shovel",
+"name": "石锹",
+"en": 5,
+"tags": [
+"shovel",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "锹"
+},
+{
+"key": "copper_shovel",
+"name": "铜锹",
+"en": 13,
+"tags": [
+"shovel",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "锹"
+},
+{
+"key": "iron_shovel",
+"name": "铁锹",
+"en": 14,
+"tags": [
+"shovel",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "锹"
+},
+{
+"key": "golden_shovel",
+"name": "金锹",
+"en": 22,
+"tags": [
+"shovel",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "锹"
+},
+{
+"key": "diamond_shovel",
+"name": "钻石锹",
+"en": 10,
+"tags": [
+"shovel",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "锹"
+},
+{
+"key": "netherite_shovel",
+"name": "下界合金锹",
+"en": 15,
+"tags": [
+"shovel",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "锹"
+},
+{
+"key": "wooden_hoe",
+"name": "木锄",
+"en": 15,
+"tags": [
+"hoe",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "锄"
+},
+{
+"key": "stone_hoe",
+"name": "石锄",
+"en": 5,
+"tags": [
+"hoe",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "锄"
+},
+{
+"key": "copper_hoe",
+"name": "铜锄",
+"en": 13,
+"tags": [
+"hoe",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "锄"
+},
+{
+"key": "iron_hoe",
+"name": "铁锄",
+"en": 14,
+"tags": [
+"hoe",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "锄"
+},
+{
+"key": "golden_hoe",
+"name": "金锄",
+"en": 22,
+"tags": [
+"hoe",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "锄"
+},
+{
+"key": "diamond_hoe",
+"name": "钻石锄",
+"en": 10,
+"tags": [
+"hoe",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "锄"
+},
+{
+"key": "netherite_hoe",
+"name": "下界合金锄",
+"en": 15,
+"tags": [
+"hoe",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "锄"
+},
+{
+"key": "leather_helmet",
+"name": "皮革头盔",
+"en": 15,
+"tags": [
+"head_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "头盔"
+},
+{
+"key": "chainmail_helmet",
+"name": "锁链头盔",
+"en": 12,
+"tags": [
+"head_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "头盔"
+},
+{
+"key": "copper_helmet",
+"name": "铜头盔",
+"en": 8,
+"tags": [
+"head_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "头盔"
+},
+{
+"key": "iron_helmet",
+"name": "铁头盔",
+"en": 9,
+"tags": [
+"head_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "头盔"
+},
+{
+"key": "golden_helmet",
+"name": "金头盔",
+"en": 25,
+"tags": [
+"head_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "头盔"
+},
+{
+"key": "diamond_helmet",
+"name": "钻石头盔",
+"en": 10,
+"tags": [
+"head_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "头盔"
+},
+{
+"key": "netherite_helmet",
+"name": "下界合金头盔",
+"en": 15,
+"tags": [
+"head_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "头盔"
+},
+{
+"key": "leather_chestplate",
+"name": "皮革胸甲",
+"en": 15,
+"tags": [
+"chest_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "盔甲"
+},
+{
+"key": "chainmail_chestplate",
+"name": "锁链胸甲",
+"en": 12,
+"tags": [
+"chest_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "盔甲"
+},
+{
+"key": "copper_chestplate",
+"name": "铜胸甲",
+"en": 8,
+"tags": [
+"chest_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "盔甲"
+},
+{
+"key": "iron_chestplate",
+"name": "铁胸甲",
+"en": 9,
+"tags": [
+"chest_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "盔甲"
+},
+{
+"key": "golden_chestplate",
+"name": "金胸甲",
+"en": 25,
+"tags": [
+"chest_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "盔甲"
+},
+{
+"key": "diamond_chestplate",
+"name": "钻石胸甲",
+"en": 10,
+"tags": [
+"chest_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "盔甲"
+},
+{
+"key": "netherite_chestplate",
+"name": "下界合金胸甲",
+"en": 15,
+"tags": [
+"chest_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "盔甲"
+},
+{
+"key": "leather_leggings",
+"name": "皮革护腿",
+"en": 15,
+"tags": [
+"leg_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "护腿"
+},
+{
+"key": "chainmail_leggings",
+"name": "锁链护腿",
+"en": 12,
+"tags": [
+"leg_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "护腿"
+},
+{
+"key": "copper_leggings",
+"name": "铜护腿",
+"en": 8,
+"tags": [
+"leg_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "护腿"
+},
+{
+"key": "iron_leggings",
+"name": "铁护腿",
+"en": 9,
+"tags": [
+"leg_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "护腿"
+},
+{
+"key": "golden_leggings",
+"name": "金护腿",
+"en": 25,
+"tags": [
+"leg_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "护腿"
+},
+{
+"key": "diamond_leggings",
+"name": "钻石护腿",
+"en": 10,
+"tags": [
+"leg_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "护腿"
+},
+{
+"key": "netherite_leggings",
+"name": "下界合金护腿",
+"en": 15,
+"tags": [
+"leg_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "护腿"
+},
+{
+"key": "leather_boots",
+"name": "皮革靴子",
+"en": 15,
+"tags": [
+"foot_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "靴子"
+},
+{
+"key": "chainmail_boots",
+"name": "锁链靴子",
+"en": 12,
+"tags": [
+"foot_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "靴子"
+},
+{
+"key": "copper_boots",
+"name": "铜靴子",
+"en": 8,
+"tags": [
+"foot_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "靴子"
+},
+{
+"key": "iron_boots",
+"name": "铁靴子",
+"en": 9,
+"tags": [
+"foot_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "靴子"
+},
+{
+"key": "golden_boots",
+"name": "金靴子",
+"en": 25,
+"tags": [
+"foot_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "靴子"
+},
+{
+"key": "diamond_boots",
+"name": "钻石靴子",
+"en": 10,
+"tags": [
+"foot_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "靴子"
+},
+{
+"key": "netherite_boots",
+"name": "下界合金靴子",
+"en": 15,
+"tags": [
+"foot_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "靴子"
+},
+{
+"key": "turtle_helmet",
+"name": "海龟壳",
+"en": 9,
+"tags": [
+"head_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "头盔"
+},
+{
+"key": "bow",
+"name": "弓",
+"en": 1,
+"tags": [
+"bow",
+"durability",
+"vanishing"
+],
+"group": "远程"
+},
+{
+"key": "crossbow",
+"name": "弩",
+"en": 1,
+"tags": [
+"crossbow",
+"durability",
+"vanishing"
+],
+"group": "远程"
+},
+{
+"key": "trident",
+"name": "三叉戟",
+"en": 1,
+"tags": [
+"trident",
+"durability",
+"vanishing"
+],
+"group": "远程"
+},
+{
+"key": "fishing_rod",
+"name": "钓鱼竿",
+"en": 1,
+"tags": [
+"fishing",
+"durability",
+"vanishing"
+],
+"group": "工具"
+},
+{
+"key": "mace",
+"name": "重锤",
+"en": 15,
+"tags": [
+"mace",
+"weapon",
+"durability",
+"fire_aspect",
+"vanishing"
+],
+"group": "工具"
+},
+{
+"key": "shears",
+"name": "剪刀",
+"en": 1,
+"tags": [
+"mining",
+"durability",
+"vanishing"
+],
+"group": "工具"
+},
+{
+"key": "book",
+"name": "书（附魔书）",
+"en": 1,
+"tags": [],
+"group": "其他"
+},
+{
+"key": "wooden_spear",
+"name": "木矛",
+"en": 15,
+"tags": [
+"spear",
+"melee_weapon",
+"sharp_weapon",
+"weapon",
+"durability",
+"fire_aspect",
+"vanishing"
+],
+"group": "长矛（1.21.11+）"
+},
+{
+"key": "stone_spear",
+"name": "石矛",
+"en": 5,
+"tags": [
+"spear",
+"melee_weapon",
+"sharp_weapon",
+"weapon",
+"durability",
+"fire_aspect",
+"vanishing"
+],
+"group": "长矛（1.21.11+）"
+},
+{
+"key": "copper_spear",
+"name": "铜矛",
+"en": 13,
+"tags": [
+"spear",
+"melee_weapon",
+"sharp_weapon",
+"weapon",
+"durability",
+"fire_aspect",
+"vanishing"
+],
+"group": "长矛（1.21.11+）"
+},
+{
+"key": "iron_spear",
+"name": "铁矛",
+"en": 14,
+"tags": [
+"spear",
+"melee_weapon",
+"sharp_weapon",
+"weapon",
+"durability",
+"fire_aspect",
+"vanishing"
+],
+"group": "长矛（1.21.11+）"
+},
+{
+"key": "golden_spear",
+"name": "金矛",
+"en": 22,
+"tags": [
+"spear",
+"melee_weapon",
+"sharp_weapon",
+"weapon",
+"durability",
+"fire_aspect",
+"vanishing"
+],
+"group": "长矛（1.21.11+）"
+},
+{
+"key": "diamond_spear",
+"name": "钻石矛",
+"en": 10,
+"tags": [
+"spear",
+"melee_weapon",
+"sharp_weapon",
+"weapon",
+"durability",
+"fire_aspect",
+"vanishing"
+],
+"group": "长矛（1.21.11+）"
+},
+{
+"key": "netherite_spear",
+"name": "下界合金矛",
+"en": 15,
+"tags": [
+"spear",
+"melee_weapon",
+"sharp_weapon",
+"weapon",
+"durability",
+"fire_aspect",
+"vanishing"
+],
+"group": "长矛（1.21.11+）"
+}
+],
+"ench": [
+{
+"id": "aqua_affinity",
+"name": "水下速掘",
+"max": 1,
+"w": 2,
+"minB": 1,
+"minP": 0,
+"maxB": 41,
+"maxP": 0,
+"sup": [
+"chainmail_helmet",
+"copper_helmet",
+"diamond_helmet",
+"golden_helmet",
+"iron_helmet",
+"leather_helmet",
+"netherite_helmet",
+"turtle_helmet"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "bane_of_arthropods",
+"name": "节肢杀手",
+"max": 5,
+"w": 5,
+"minB": 5,
+"minP": 8,
+"maxB": 25,
+"maxP": 8,
+"sup": [
+"copper_axe",
+"copper_spear",
+"copper_sword",
+"diamond_axe",
+"diamond_spear",
+"diamond_sword",
+"golden_axe",
+"golden_spear",
+"golden_sword",
+"iron_axe",
+"iron_spear",
+"iron_sword",
+"mace",
+"netherite_axe",
+"netherite_spear",
+"netherite_sword",
+"stone_axe",
+"stone_spear",
+"stone_sword",
+"wooden_axe",
+"wooden_spear",
+"wooden_sword"
+],
+"pri": [
+"copper_spear",
+"copper_sword",
+"diamond_spear",
+"diamond_sword",
+"golden_spear",
+"golden_sword",
+"iron_spear",
+"iron_sword",
+"netherite_spear",
+"netherite_sword",
+"stone_spear",
+"stone_sword",
+"wooden_spear",
+"wooden_sword"
+],
+"excl": "damage"
+},
+{
+"id": "blast_protection",
+"name": "爆炸保护",
+"max": 4,
+"w": 2,
+"minB": 5,
+"minP": 8,
+"maxB": 13,
+"maxP": 8,
+"sup": [
+"chainmail_boots",
+"chainmail_chestplate",
+"chainmail_helmet",
+"chainmail_leggings",
+"copper_boots",
+"copper_chestplate",
+"copper_helmet",
+"copper_leggings",
+"diamond_boots",
+"diamond_chestplate",
+"diamond_helmet",
+"diamond_leggings",
+"golden_boots",
+"golden_chestplate",
+"golden_helmet",
+"golden_leggings",
+"iron_boots",
+"iron_chestplate",
+"iron_helmet",
+"iron_leggings",
+"leather_boots",
+"leather_chestplate",
+"leather_helmet",
+"leather_leggings",
+"netherite_boots",
+"netherite_chestplate",
+"netherite_helmet",
+"netherite_leggings",
+"turtle_helmet"
+],
+"pri": [],
+"excl": "armor"
+},
+{
+"id": "breach",
+"name": "破甲",
+"max": 4,
+"w": 2,
+"minB": 15,
+"minP": 9,
+"maxB": 65,
+"maxP": 9,
+"sup": [
+"mace"
+],
+"pri": [],
+"excl": "damage"
+},
+{
+"id": "channeling",
+"name": "引雷",
+"max": 1,
+"w": 1,
+"minB": 25,
+"minP": 0,
+"maxB": 50,
+"maxP": 0,
+"sup": [
+"trident"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "density",
+"name": "密度",
+"max": 5,
+"w": 5,
+"minB": 5,
+"minP": 8,
+"maxB": 25,
+"maxP": 8,
+"sup": [
+"mace"
+],
+"pri": [],
+"excl": "damage"
+},
+{
+"id": "depth_strider",
+"name": "深海探索者",
+"max": 3,
+"w": 2,
+"minB": 10,
+"minP": 10,
+"maxB": 25,
+"maxP": 10,
+"sup": [
+"chainmail_boots",
+"copper_boots",
+"diamond_boots",
+"golden_boots",
+"iron_boots",
+"leather_boots",
+"netherite_boots"
+],
+"pri": [],
+"excl": "boots"
+},
+{
+"id": "efficiency",
+"name": "效率",
+"max": 5,
+"w": 10,
+"minB": 1,
+"minP": 10,
+"maxB": 51,
+"maxP": 10,
+"sup": [
+"copper_axe",
+"copper_hoe",
+"copper_pickaxe",
+"copper_shovel",
+"diamond_axe",
+"diamond_hoe",
+"diamond_pickaxe",
+"diamond_shovel",
+"golden_axe",
+"golden_hoe",
+"golden_pickaxe",
+"golden_shovel",
+"iron_axe",
+"iron_hoe",
+"iron_pickaxe",
+"iron_shovel",
+"netherite_axe",
+"netherite_hoe",
+"netherite_pickaxe",
+"netherite_shovel",
+"shears",
+"stone_axe",
+"stone_hoe",
+"stone_pickaxe",
+"stone_shovel",
+"wooden_axe",
+"wooden_hoe",
+"wooden_pickaxe",
+"wooden_shovel"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "feather_falling",
+"name": "摔落保护",
+"max": 4,
+"w": 5,
+"minB": 5,
+"minP": 6,
+"maxB": 11,
+"maxP": 6,
+"sup": [
+"chainmail_boots",
+"copper_boots",
+"diamond_boots",
+"golden_boots",
+"iron_boots",
+"leather_boots",
+"netherite_boots"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "fire_aspect",
+"name": "火焰附加",
+"max": 2,
+"w": 2,
+"minB": 10,
+"minP": 20,
+"maxB": 60,
+"maxP": 20,
+"sup": [
+"copper_spear",
+"copper_sword",
+"diamond_spear",
+"diamond_sword",
+"golden_spear",
+"golden_sword",
+"iron_spear",
+"iron_sword",
+"mace",
+"netherite_spear",
+"netherite_sword",
+"stone_spear",
+"stone_sword",
+"wooden_spear",
+"wooden_sword"
+],
+"pri": [
+"copper_spear",
+"copper_sword",
+"diamond_spear",
+"diamond_sword",
+"golden_spear",
+"golden_sword",
+"iron_spear",
+"iron_sword",
+"netherite_spear",
+"netherite_sword",
+"stone_spear",
+"stone_sword",
+"wooden_spear",
+"wooden_sword"
+],
+"excl": null
+},
+{
+"id": "fire_protection",
+"name": "火焰保护",
+"max": 4,
+"w": 5,
+"minB": 10,
+"minP": 8,
+"maxB": 18,
+"maxP": 8,
+"sup": [
+"chainmail_boots",
+"chainmail_chestplate",
+"chainmail_helmet",
+"chainmail_leggings",
+"copper_boots",
+"copper_chestplate",
+"copper_helmet",
+"copper_leggings",
+"diamond_boots",
+"diamond_chestplate",
+"diamond_helmet",
+"diamond_leggings",
+"golden_boots",
+"golden_chestplate",
+"golden_helmet",
+"golden_leggings",
+"iron_boots",
+"iron_chestplate",
+"iron_helmet",
+"iron_leggings",
+"leather_boots",
+"leather_chestplate",
+"leather_helmet",
+"leather_leggings",
+"netherite_boots",
+"netherite_chestplate",
+"netherite_helmet",
+"netherite_leggings",
+"turtle_helmet"
+],
+"pri": [],
+"excl": "armor"
+},
+{
+"id": "flame",
+"name": "火矢",
+"max": 1,
+"w": 2,
+"minB": 20,
+"minP": 0,
+"maxB": 50,
+"maxP": 0,
+"sup": [
+"bow"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "fortune",
+"name": "时运",
+"max": 3,
+"w": 2,
+"minB": 15,
+"minP": 9,
+"maxB": 65,
+"maxP": 9,
+"sup": [
+"copper_axe",
+"copper_hoe",
+"copper_pickaxe",
+"copper_shovel",
+"diamond_axe",
+"diamond_hoe",
+"diamond_pickaxe",
+"diamond_shovel",
+"golden_axe",
+"golden_hoe",
+"golden_pickaxe",
+"golden_shovel",
+"iron_axe",
+"iron_hoe",
+"iron_pickaxe",
+"iron_shovel",
+"netherite_axe",
+"netherite_hoe",
+"netherite_pickaxe",
+"netherite_shovel",
+"stone_axe",
+"stone_hoe",
+"stone_pickaxe",
+"stone_shovel",
+"wooden_axe",
+"wooden_hoe",
+"wooden_pickaxe",
+"wooden_shovel"
+],
+"pri": [],
+"excl": "mining"
+},
+{
+"id": "impaling",
+"name": "穿刺",
+"max": 5,
+"w": 2,
+"minB": 1,
+"minP": 8,
+"maxB": 21,
+"maxP": 8,
+"sup": [
+"trident"
+],
+"pri": [],
+"excl": "damage"
+},
+{
+"id": "infinity",
+"name": "无限",
+"max": 1,
+"w": 1,
+"minB": 20,
+"minP": 0,
+"maxB": 50,
+"maxP": 0,
+"sup": [
+"bow"
+],
+"pri": [],
+"excl": "bow"
+},
+{
+"id": "knockback",
+"name": "击退",
+"max": 2,
+"w": 5,
+"minB": 5,
+"minP": 20,
+"maxB": 55,
+"maxP": 20,
+"sup": [
+"copper_spear",
+"copper_sword",
+"diamond_spear",
+"diamond_sword",
+"golden_spear",
+"golden_sword",
+"iron_spear",
+"iron_sword",
+"netherite_spear",
+"netherite_sword",
+"stone_spear",
+"stone_sword",
+"wooden_spear",
+"wooden_sword"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "looting",
+"name": "抢夺",
+"max": 3,
+"w": 2,
+"minB": 15,
+"minP": 9,
+"maxB": 65,
+"maxP": 9,
+"sup": [
+"copper_spear",
+"copper_sword",
+"diamond_spear",
+"diamond_sword",
+"golden_spear",
+"golden_sword",
+"iron_spear",
+"iron_sword",
+"netherite_spear",
+"netherite_sword",
+"stone_spear",
+"stone_sword",
+"wooden_spear",
+"wooden_sword"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "loyalty",
+"name": "忠诚",
+"max": 3,
+"w": 5,
+"minB": 12,
+"minP": 7,
+"maxB": 50,
+"maxP": 0,
+"sup": [
+"trident"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "luck_of_the_sea",
+"name": "海之眷顾",
+"max": 3,
+"w": 2,
+"minB": 15,
+"minP": 9,
+"maxB": 65,
+"maxP": 9,
+"sup": [
+"fishing_rod"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "lunge",
+"name": "突刺",
+"max": 3,
+"w": 5,
+"minB": 5,
+"minP": 8,
+"maxB": 25,
+"maxP": 8,
+"sup": [
+"copper_spear",
+"diamond_spear",
+"golden_spear",
+"iron_spear",
+"netherite_spear",
+"stone_spear",
+"wooden_spear"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "lure",
+"name": "饵钓",
+"max": 3,
+"w": 2,
+"minB": 15,
+"minP": 9,
+"maxB": 65,
+"maxP": 9,
+"sup": [
+"fishing_rod"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "multishot",
+"name": "多重射击",
+"max": 1,
+"w": 2,
+"minB": 20,
+"minP": 0,
+"maxB": 50,
+"maxP": 0,
+"sup": [
+"crossbow"
+],
+"pri": [],
+"excl": "crossbow"
+},
+{
+"id": "piercing",
+"name": "穿透",
+"max": 4,
+"w": 10,
+"minB": 1,
+"minP": 10,
+"maxB": 50,
+"maxP": 0,
+"sup": [
+"crossbow"
+],
+"pri": [],
+"excl": "crossbow"
+},
+{
+"id": "power",
+"name": "力量",
+"max": 5,
+"w": 10,
+"minB": 1,
+"minP": 10,
+"maxB": 16,
+"maxP": 10,
+"sup": [
+"bow"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "projectile_protection",
+"name": "弹射物保护",
+"max": 4,
+"w": 5,
+"minB": 3,
+"minP": 6,
+"maxB": 9,
+"maxP": 6,
+"sup": [
+"chainmail_boots",
+"chainmail_chestplate",
+"chainmail_helmet",
+"chainmail_leggings",
+"copper_boots",
+"copper_chestplate",
+"copper_helmet",
+"copper_leggings",
+"diamond_boots",
+"diamond_chestplate",
+"diamond_helmet",
+"diamond_leggings",
+"golden_boots",
+"golden_chestplate",
+"golden_helmet",
+"golden_leggings",
+"iron_boots",
+"iron_chestplate",
+"iron_helmet",
+"iron_leggings",
+"leather_boots",
+"leather_chestplate",
+"leather_helmet",
+"leather_leggings",
+"netherite_boots",
+"netherite_chestplate",
+"netherite_helmet",
+"netherite_leggings",
+"turtle_helmet"
+],
+"pri": [],
+"excl": "armor"
+},
+{
+"id": "protection",
+"name": "保护",
+"max": 4,
+"w": 10,
+"minB": 1,
+"minP": 11,
+"maxB": 12,
+"maxP": 11,
+"sup": [
+"chainmail_boots",
+"chainmail_chestplate",
+"chainmail_helmet",
+"chainmail_leggings",
+"copper_boots",
+"copper_chestplate",
+"copper_helmet",
+"copper_leggings",
+"diamond_boots",
+"diamond_chestplate",
+"diamond_helmet",
+"diamond_leggings",
+"golden_boots",
+"golden_chestplate",
+"golden_helmet",
+"golden_leggings",
+"iron_boots",
+"iron_chestplate",
+"iron_helmet",
+"iron_leggings",
+"leather_boots",
+"leather_chestplate",
+"leather_helmet",
+"leather_leggings",
+"netherite_boots",
+"netherite_chestplate",
+"netherite_helmet",
+"netherite_leggings",
+"turtle_helmet"
+],
+"pri": [],
+"excl": "armor"
+},
+{
+"id": "punch",
+"name": "冲击",
+"max": 2,
+"w": 2,
+"minB": 12,
+"minP": 20,
+"maxB": 37,
+"maxP": 20,
+"sup": [
+"bow"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "quick_charge",
+"name": "快速装填",
+"max": 3,
+"w": 5,
+"minB": 12,
+"minP": 20,
+"maxB": 50,
+"maxP": 0,
+"sup": [
+"crossbow"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "respiration",
+"name": "水下呼吸",
+"max": 3,
+"w": 2,
+"minB": 10,
+"minP": 10,
+"maxB": 40,
+"maxP": 10,
+"sup": [
+"chainmail_helmet",
+"copper_helmet",
+"diamond_helmet",
+"golden_helmet",
+"iron_helmet",
+"leather_helmet",
+"netherite_helmet",
+"turtle_helmet"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "riptide",
+"name": "激流",
+"max": 3,
+"w": 2,
+"minB": 17,
+"minP": 7,
+"maxB": 50,
+"maxP": 0,
+"sup": [
+"trident"
+],
+"pri": [],
+"excl": "riptide"
+},
+{
+"id": "sharpness",
+"name": "锋利",
+"max": 5,
+"w": 10,
+"minB": 1,
+"minP": 11,
+"maxB": 21,
+"maxP": 11,
+"sup": [
+"copper_axe",
+"copper_spear",
+"copper_sword",
+"diamond_axe",
+"diamond_spear",
+"diamond_sword",
+"golden_axe",
+"golden_spear",
+"golden_sword",
+"iron_axe",
+"iron_spear",
+"iron_sword",
+"netherite_axe",
+"netherite_spear",
+"netherite_sword",
+"stone_axe",
+"stone_spear",
+"stone_sword",
+"wooden_axe",
+"wooden_spear",
+"wooden_sword"
+],
+"pri": [
+"copper_spear",
+"copper_sword",
+"diamond_spear",
+"diamond_sword",
+"golden_spear",
+"golden_sword",
+"iron_spear",
+"iron_sword",
+"netherite_spear",
+"netherite_sword",
+"stone_spear",
+"stone_sword",
+"wooden_spear",
+"wooden_sword"
+],
+"excl": "damage"
+},
+{
+"id": "silk_touch",
+"name": "精准采集",
+"max": 1,
+"w": 1,
+"minB": 15,
+"minP": 0,
+"maxB": 65,
+"maxP": 0,
+"sup": [
+"copper_axe",
+"copper_hoe",
+"copper_pickaxe",
+"copper_shovel",
+"diamond_axe",
+"diamond_hoe",
+"diamond_pickaxe",
+"diamond_shovel",
+"golden_axe",
+"golden_hoe",
+"golden_pickaxe",
+"golden_shovel",
+"iron_axe",
+"iron_hoe",
+"iron_pickaxe",
+"iron_shovel",
+"netherite_axe",
+"netherite_hoe",
+"netherite_pickaxe",
+"netherite_shovel",
+"stone_axe",
+"stone_hoe",
+"stone_pickaxe",
+"stone_shovel",
+"wooden_axe",
+"wooden_hoe",
+"wooden_pickaxe",
+"wooden_shovel"
+],
+"pri": [],
+"excl": "mining"
+},
+{
+"id": "smite",
+"name": "亡灵杀手",
+"max": 5,
+"w": 5,
+"minB": 5,
+"minP": 8,
+"maxB": 25,
+"maxP": 8,
+"sup": [
+"copper_axe",
+"copper_spear",
+"copper_sword",
+"diamond_axe",
+"diamond_spear",
+"diamond_sword",
+"golden_axe",
+"golden_spear",
+"golden_sword",
+"iron_axe",
+"iron_spear",
+"iron_sword",
+"mace",
+"netherite_axe",
+"netherite_spear",
+"netherite_sword",
+"stone_axe",
+"stone_spear",
+"stone_sword",
+"wooden_axe",
+"wooden_spear",
+"wooden_sword"
+],
+"pri": [
+"copper_spear",
+"copper_sword",
+"diamond_spear",
+"diamond_sword",
+"golden_spear",
+"golden_sword",
+"iron_spear",
+"iron_sword",
+"netherite_spear",
+"netherite_sword",
+"stone_spear",
+"stone_sword",
+"wooden_spear",
+"wooden_sword"
+],
+"excl": "damage"
+},
+{
+"id": "sweeping_edge",
+"name": "横扫之刃",
+"max": 3,
+"w": 2,
+"minB": 5,
+"minP": 9,
+"maxB": 20,
+"maxP": 9,
+"sup": [
+"copper_sword",
+"diamond_sword",
+"golden_sword",
+"iron_sword",
+"netherite_sword",
+"stone_sword",
+"wooden_sword"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "thorns",
+"name": "荆棘",
+"max": 3,
+"w": 1,
+"minB": 10,
+"minP": 20,
+"maxB": 60,
+"maxP": 20,
+"sup": [
+"chainmail_boots",
+"chainmail_chestplate",
+"chainmail_helmet",
+"chainmail_leggings",
+"copper_boots",
+"copper_chestplate",
+"copper_helmet",
+"copper_leggings",
+"diamond_boots",
+"diamond_chestplate",
+"diamond_helmet",
+"diamond_leggings",
+"golden_boots",
+"golden_chestplate",
+"golden_helmet",
+"golden_leggings",
+"iron_boots",
+"iron_chestplate",
+"iron_helmet",
+"iron_leggings",
+"leather_boots",
+"leather_chestplate",
+"leather_helmet",
+"leather_leggings",
+"netherite_boots",
+"netherite_chestplate",
+"netherite_helmet",
+"netherite_leggings",
+"turtle_helmet"
+],
+"pri": [
+"chainmail_chestplate",
+"copper_chestplate",
+"diamond_chestplate",
+"golden_chestplate",
+"iron_chestplate",
+"leather_chestplate",
+"netherite_chestplate"
+],
+"excl": null
+},
+{
+"id": "unbreaking",
+"name": "耐久",
+"max": 3,
+"w": 5,
+"minB": 5,
+"minP": 8,
+"maxB": 55,
+"maxP": 8,
+"sup": [
+"bow",
+"chainmail_boots",
+"chainmail_chestplate",
+"chainmail_helmet",
+"chainmail_leggings",
+"copper_axe",
+"copper_boots",
+"copper_chestplate",
+"copper_helmet",
+"copper_hoe",
+"copper_leggings",
+"copper_pickaxe",
+"copper_shovel",
+"copper_spear",
+"copper_sword",
+"crossbow",
+"diamond_axe",
+"diamond_boots",
+"diamond_chestplate",
+"diamond_helmet",
+"diamond_hoe",
+"diamond_leggings",
+"diamond_pickaxe",
+"diamond_shovel",
+"diamond_spear",
+"diamond_sword",
+"fishing_rod",
+"golden_axe",
+"golden_boots",
+"golden_chestplate",
+"golden_helmet",
+"golden_hoe",
+"golden_leggings",
+"golden_pickaxe",
+"golden_shovel",
+"golden_spear",
+"golden_sword",
+"iron_axe",
+"iron_boots",
+"iron_chestplate",
+"iron_helmet",
+"iron_hoe",
+"iron_leggings",
+"iron_pickaxe",
+"iron_shovel",
+"iron_spear",
+"iron_sword",
+"leather_boots",
+"leather_chestplate",
+"leather_helmet",
+"leather_leggings",
+"mace",
+"netherite_axe",
+"netherite_boots",
+"netherite_chestplate",
+"netherite_helmet",
+"netherite_hoe",
+"netherite_leggings",
+"netherite_pickaxe",
+"netherite_shovel",
+"netherite_spear",
+"netherite_sword",
+"shears",
+"stone_axe",
+"stone_hoe",
+"stone_pickaxe",
+"stone_shovel",
+"stone_spear",
+"stone_sword",
+"trident",
+"turtle_helmet",
+"wooden_axe",
+"wooden_hoe",
+"wooden_pickaxe",
+"wooden_shovel",
+"wooden_spear",
+"wooden_sword"
+],
+"pri": [],
+"excl": null
+}
+],
+"excl": {
+"armor": [
+"protection",
+"blast_protection",
+"fire_protection",
+"projectile_protection"
+],
+"boots": [
+"frost_walker",
+"depth_strider"
+],
+"bow": [
+"infinity",
+"mending"
+],
+"crossbow": [
+"multishot",
+"piercing"
+],
+"damage": [
+"sharpness",
+"smite",
+"bane_of_arthropods",
+"impaling",
+"density",
+"breach"
+],
+"mining": [
+"fortune",
+"silk_touch"
+],
+"riptide": [
+"loyalty",
+"channeling"
+]
+}
+};
+const ITEM = {}; DATA.items.forEach(i => ITEM[i.key] = i);
+const ENCH = {}; DATA.ench.forEach(e => ENCH[e.id] = e);
+
+/* ---------- java.util.Random ---------- */
+const P48 = 281474976710656, P24 = 16777216;
+const ML = 0xECE66D, MH = 0x5DE, ADD = 11;
+function step(st) {
+  const lo = st % P24, hi = (st - lo) / P24;
+  return (((hi * ML + lo * MH) % P24) * P24 + lo * ML + ADD) % P48;
+}
+function seedToState(u) {
+  const lo = (u ^ 0xDEECE66D) >>> 0;
+  return (u >= 2147483648 ? 0xFFFA : 0x0005) * 4294967296 + lo;
+}
+function JR() { this.st = 0; }
+JR.prototype.setSeed = function (s) { this.st = seedToState(s >>> 0); return this; };
+JR.prototype.next = function (bits) { this.st = step(this.st); return Math.floor(this.st / Math.pow(2, 48 - bits)); };
+JR.prototype.nextInt = function (n) {
+  if ((n & (n - 1)) === 0 && n > 0) return Math.floor((n * this.next(31)) / 2147483648);
+  let bits, val;
+  do { bits = this.next(31); val = bits % n; } while (bits - val + (n - 1) >= 2147483648);
+  return val;
+};
+JR.prototype.nextFloat = function () { return this.next(24) / 16777216; };
+
+/* ---------- 16 位分肢快速 LCG（用于暴力搜索） ---------- */
+const m0 = 0xE66D, m1 = 0xDEEC, m2 = 5;
+let R0 = 0, R1 = 0, R2 = 0;
+function stepL(x0, x1, x2) {
+  const t0 = Math.imul(x0, m0);
+  const t1 = (Math.imul(x0, m1) >>> 0) + (Math.imul(x1, m0) >>> 0);
+  const t2 = (Math.imul(x0, m2) >>> 0) + (Math.imul(x1, m1) >>> 0) + (Math.imul(x2, m0) >>> 0);
+  let r0 = (t0 >>> 0) & 0xFFFF;
+  const u1 = t1 + ((t0 >>> 16) & 0xFFFF);
+  let r1 = u1 & 0xFFFF;
+  let r2 = (t2 + ((u1 / 65536) | 0)) & 0xFFFF;
+  r0 += ADD;
+  if (r0 >= 65536) { r0 -= 65536; r1 += 1; if (r1 >= 65536) { r1 -= 65536; r2 = (r2 + 1) & 0xFFFF; } }
+  R0 = r0; R1 = r1; R2 = r2;
+}
+
+/* ---------- 附魔台 ---------- */
+const levelFor = (jr, slot, b) => {
+  const i = jr.nextInt(8) + 1 + (b >> 1) + jr.nextInt(b + 1);
+  if (slot === 0) return Math.max(Math.floor(i / 3), 1);
+  if (slot === 1) return Math.floor(i * 2 / 3) + 1;
+  return Math.max(i, b * 2);
+};
+function levels(xpSeed, b) {
+  const jr = new JR().setSeed(xpSeed >>> 0);
+  return [levelFor(jr, 0, b), levelFor(jr, 1, b), levelFor(jr, 2, b)];
+}
+function candidates(itemKey, cost) {
+  if (!ITEM[itemKey]) return [];
+  const out = [];
+  for (const e of DATA.ench) {
+    let ok;
+    if (itemKey === 'book') ok = true;
+    else if (e.pri.length) ok = e.pri.indexOf(itemKey) >= 0;
+    else ok = e.sup.indexOf(itemKey) >= 0;
+    if (!ok) continue;
+    for (let L = e.max; L >= 1; L--) {
+      if (cost >= e.minB + (L - 1) * e.minP && cost <= e.maxB + (L - 1) * e.maxP) {
+        out.push({ id: e.id, name: e.name, w: e.w, lv: L }); break;
+      }
+    }
+  }
+  return out;
+}
+function exclusive(a, b) {
+  if (a === b) return true;
+  const ea = ENCH[a], eb = ENCH[b];
+  return !!((ea && ea.excl && (DATA.excl[ea.excl] || []).indexOf(b) >= 0) ||
+            (eb && eb.excl && (DATA.excl[eb.excl] || []).indexOf(a) >= 0));
+}
+function generate(jr, itemKey, cost) {
+  const it = ITEM[itemKey], e = it ? it.en : 0;
+  if (e <= 0) return [];
+  const q = (e >> 2) + 1;
+  let lv = cost + 1 + jr.nextInt(q) + jr.nextInt(q);
+  const f = (jr.nextFloat() + jr.nextFloat() - 1) * 0.15;
+  lv = Math.floor(lv * (1 + f) + 0.5);
+  if (lv < 1) return [];
+  let cands = candidates(itemKey, lv);
+  const out = [];
+  let rem = lv;
+  while (cands.length) {
+    let total = 0; for (const c of cands) total += c.w;
+    let k = jr.nextInt(total), idx = 0;
+    while (k >= cands[idx].w) { k -= cands[idx].w; idx++; }
+    const pick = cands[idx];
+    out.push({ id: pick.id, name: pick.name, lv: pick.lv });
+    cands = cands.filter(c => !exclusive(c.id, pick.id));
+    if (!cands.length) break;
+    if (jr.nextInt(50) >= rem + 1) break;
+    rem = rem >> 1;
+  }
+  if (itemKey === 'book' && out.length > 1) out.splice(jr.nextInt(out.length), 1);
+  return out;
+}
+function predict(xpSeed, itemKey, b) {
+  const lv = levels(xpSeed, b), res = [];
+  for (let s = 0; s < 3; s++) {
+    const jr = new JR().setSeed((((xpSeed | 0) + s) | 0) >>> 0);
+    res.push({ slot: s, need: lv[s], usable: lv[s] >= s + 1 && lv[s] > 0,
+      list: lv[s] > 0 ? generate(jr, itemKey, lv[s]) : [] });
+  }
+  return res;
+}
+const ROM = ['', 'I', 'II', 'III', 'IV', 'V'];
+function rom(n) { return ROM[n] || ('Lv' + n); }
+function simulate(itemKey, b, n, seedFn) {
+  const rnd = seedFn || (() => (Math.random() * 4294967296) >>> 0);
+  const slotStat = [{}, {}, {}], lvStat = [{}, {}, {}], multi = [{}, {}, {}];
+  for (let t = 0; t < n; t++) {
+    const sd = rnd(), lv = levels(sd, b);
+    for (let s = 0; s < 3; s++) {
+      lvStat[s][lv[s]] = (lvStat[s][lv[s]] || 0) + 1;
+      if (lv[s] < s + 1 || lv[s] <= 0) continue;
+      const list = generate(new JR().setSeed((((sd | 0) + s) | 0) >>> 0), itemKey, lv[s]);
+      if (!list.length) continue;
+      multi[s][list.map(x => x.name + ' ' + rom(x.lv)).sort().join(' + ')] =
+        (multi[s][list.map(x => x.name + ' ' + rom(x.lv)).sort().join(' + ')] || 0) + 1;
+      for (const x of list) {
+        const k = x.name + ' ' + rom(x.lv);
+        slotStat[s][k] = (slotStat[s][k] || 0) + 1;
+      }
+    }
+  }
+  return { n, slotStat, lvStat, multi };
+}
+
+/* ---------- 破解：从显示等级反推 XpSeed ---------- */
+function normSlot(raw, slot) { return raw < slot + 1 ? 0 : raw; }
+const STEPC = `
+t0 = Math.imul(x0, 58989);
+t1 = (Math.imul(x0, 57068) >>> 0) + (Math.imul(x1, 58989) >>> 0);
+t2 = (Math.imul(x0, 5) >>> 0) + (Math.imul(x1, 57068) >>> 0) + (Math.imul(x2, 58989) >>> 0);
+r0 = (t0 >>> 0) & 65535;
+u1 = t1 + ((t0 >>> 16) & 65535);
+r1 = u1 & 65535;
+r2 = (t2 + ((u1 / 65536) | 0)) & 65535;
+r0 += 11;
+if (r0 >= 65536) { r0 -= 65536; r1 += 1; if (r1 >= 65536) { r1 -= 65536; r2 = (r2 + 1) & 65535; } }
+x0 = r0; x1 = r1; x2 = r2;
+`;
+function makeCheckerFast(b, e0, e1, e2) {
+  const bp1 = b + 1, half = b >> 1, b2 = b * 2;
+  const pow2 = (bp1 & (bp1 - 1)) === 0;
+  const sh = pow2 ? 31 - Math.round(Math.log2(bp1)) : 0;
+  const draw2 = pow2
+      ? STEPC + `n2 = (x2 * 32768 + (x1 >>> 1)) >> ` + sh + `;`
+      : `do {` + STEPC + `bits = x2 * 32768 + (x1 >>> 1); n2 = bits % ` + bp1 +
+        `; } while (bits - n2 + ` + (bp1 - 1) + ` >= 2147483648);`;
+  const slotChk = (slot, exp) => {
+    const raw = slot === 0 ? 'Math.max((i / 3) | 0, 1)'
+              : slot === 1 ? '(((i * 2 / 3) | 0) + 1)'
+              : '(i > ' + b2 + ' ? i : ' + b2 + ')';
+    return `i = n1 + 1 + ` + half + ` + n2;
+raw = ` + raw + `;
+if (!(raw === ` + exp + ` || (` + exp + ` === 0 && raw < ` + (slot + 1) +
+      `) || (raw < ` + (slot + 1) + ` ? 0 : raw) === ` + exp + `)) return false;`;
+  };
+  const src = `return function (x0, x1, x2) {
+var t0, t1, t2, u1, r0, r1, r2, i, n1, n2, bits, raw;
+` + STEPC + `n1 = x2 >>> 13;
+` + draw2 + slotChk(0, e0) + `
+` + STEPC + `n1 = x2 >>> 13;
+` + draw2 + slotChk(1, e1) + `
+` + STEPC + `n1 = x2 >>> 13;
+` + draw2 + slotChk(2, e2) + `
+return true;};`;
+  return new Function(src)();
+}
+function makeLimbs(u) {
+  const lo = (u ^ 0xDEECE66D) >>> 0;
+  return [lo & 0xFFFF, lo >>> 16, u >= 2147483648 ? 0xFFFA : 0x0005];
+}
+function scanSeeds(chks, from, to, out) {
+  const n = chks.length;
+  const c0 = chks[0];
+  const c1 = n > 1 ? chks[1] : null;
+  const c2 = n > 2 ? chks[2] : null;
+  const c3 = n > 3 ? chks[3] : null;
+  const c4 = n > 4 ? chks[4] : null;
+  const c5 = n > 5 ? chks[5] : null;
+  const c6 = n > 6 ? chks[6] : null;
+  const c7 = n > 7 ? chks[7] : null;
+  for (let s = from; s < to; s++) {
+    const lo = (s ^ 0xDEECE66D) >>> 0;
+    const x0 = lo & 0xFFFF, x1 = lo >>> 16;
+    const x2 = s < 2147483648 ? 0x0005 : 0xFFFA;
+    if (!c0(x0, x1, x2)) continue;
+    if (c1 !== null && !c1(x0, x1, x2)) continue;
+    if (c2 !== null && !c2(x0, x1, x2)) continue;
+    if (c3 !== null && !c3(x0, x1, x2)) continue;
+    if (c4 !== null && !c4(x0, x1, x2)) continue;
+    if (c5 !== null && !c5(x0, x1, x2)) continue;
+    if (c6 !== null && !c6(x0, x1, x2)) continue;
+    if (c7 !== null && !c7(x0, x1, x2)) continue;
+    out.push(s);
+  }
+}
+
+/* 保守排序：只把「实测明显更便宜」的一条提到最前，其余保持原顺序（不改结果） */
+function orderObservations(obs, probe) {
+  const list = obs.slice();
+  if (list.length < 2) return list;
+  const N = probe || (1 << 19);
+  const now = (typeof performance !== 'undefined' && performance.now)
+    ? function () { return performance.now(); } : function () { return Date.now(); };
+  const cost = list.map(function (o) {
+    const chk = makeCheckerFast(o.b, o.levels[0], o.levels[1], o.levels[2]);
+    let best = Infinity;
+    for (let r = 0; r < 2; r++) {
+      const out = [], t0 = now();
+      scanSeeds([chk], 0, N, out);
+      const d = now() - t0;
+      if (d < best) best = d;
+    }
+    return best;
+  });
+  let bi = 0;
+  for (let i = 1; i < cost.length; i++) if (cost[i] < cost[bi]) bi = i;
+  if (bi !== 0 && cost[bi] < cost[0] * 0.95) {
+    const first = list.splice(bi, 1)[0];
+    list.unshift(first);
+  }
+  return list;
+}
+
+function checkSeed(u, chks) {
+  const L = makeLimbs(u);
+  for (let c = 0; c < chks.length; c++) if (!chks[c](L[0], L[1], L[2])) return false;
+  return true;
+}
+function filterCandidates(arr, obs) {
+  const chks = obs.map(o => makeCheckerFast(o.b, o.levels[0], o.levels[1], o.levels[2]));
+  const out = [];
+  for (let i = 0; i < arr.length; i++) if (checkSeed(arr[i], chks)) out.push(arr[i]);
+  return out;
+}
+
+/* ---------- 玩家 RNG（48 位）状态求解与递推 ---------- */
+const MASK48B = (1n << 48n) - 1n, MB = 0x5DEECE66Dn, AB = 0xBn;
+function solveState(s1, s2) {
+  const u1 = BigInt(s1 >>> 0), u2 = BigInt(s2 >>> 0);
+  const a = (24667315n * (u1 + 1n) + 18218081n * (u2 + 1n)) >> 32n;
+  const b = (-4824621n * u1 + 7847617n * (u2 + 1n)) >> 32n;
+  let seed = (7847617n * a - 18218081n * b) & MASK48B;
+  if (Number((seed >> 16n) & 0xFFFFFFFFn) !== (s1 >>> 0)) {
+    seed = (seed * MB + AB) & MASK48B;
+    if (Number((seed >> 16n) & 0xFFFFFFFFn) !== (s2 >>> 0)) return null;
+    return seed;
+  }
+  seed = (seed * MB + AB) & MASK48B;
+  if (Number((seed >> 16n) & 0xFFFFFFFFn) !== (s2 >>> 0)) return null;
+  return seed;
+}
+function stateNextInt(seed) {
+  const st = (seed * MB + AB) & MASK48B;
+  return [st, Number((st >> 16n) & 0xFFFFFFFFn)];
+}
+function stateSkip(seed, n) { for (let i = 0; i < n; i++) seed = (seed * MB + AB) & MASK48B; return seed; }
+function seedAfterThrows(state, throws) {
+  const st = throws > 0 ? stateSkip(state, 4 * throws) : state;
+  const r = stateNextInt(st);
+  return r[1] >>> 0;
+}
+function seedChain(state, throwsPerEnch, count) {
+  const list = []; let st = state;
+  for (let i = 0; i < count; i++) {
+    if (i > 0) st = stateSkip(st, 4 * throwsPerEnch);
+    const [ns, v] = stateNextInt(st);
+    list.push(v >>> 0); st = ns;
+  }
+  return list;
+}
+
+const API = { DATA, ITEM, ENCH, JR, step, seedToState, levels, levelFor, candidates, generate, predict,
+  simulate, normSlot, makeCheckerFast, makeLimbs, scanSeeds, orderObservations, checkSeed, filterCandidates,
+  solveState, stateNextInt, stateSkip, seedAfterThrows, seedChain, rom, exclusive, stepL };
+root.MCRNG = API;
+if (typeof module !== 'undefined' && module.exports) module.exports = API;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/* 共用底部抽屉选择器：原生 select 藏起来只当状态载体，视觉与交互全自绘 */
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var MASK = null, PANEL = null, BODY = null, FIND = null, TITLE = null;
+  var PICK = { sel: null, groups: [] };
+
+  function ensure() {
+    if (PANEL) return;
+    MASK = document.createElement('div'); MASK.className = 'pickmask'; MASK.id = 'pickMask';
+    PANEL = document.createElement('div'); PANEL.className = 'pickpanel'; PANEL.id = 'pickPanel';
+    PANEL.innerHTML =
+      '<div class="pickhead"><b id="pkTitle">选择</b><button type="button" id="pkClose">×</button></div>' +
+      '<input class="pkfind" id="pkFind" placeholder="搜索…" autocomplete="off">' +
+      '<div class="pkbody" id="pkBody"></div>';
+    document.body.appendChild(MASK);
+    document.body.appendChild(PANEL);
+    BODY = $('pkBody'); FIND = $('pkFind'); TITLE = $('pkTitle');
+    MASK.addEventListener('click', close);
+    $('pkClose').addEventListener('click', close);
+    FIND.addEventListener('input', function () { draw(FIND.value); });
+    BODY.addEventListener('click', function (ev) {
+      var it = ev.target.closest('.pickitem');
+      if (!it) return;
+      var sel = PICK.sel, v = it.getAttribute('data-v');
+      close();
+      if (!sel) return;
+      sel.value = v;
+      sel.dispatchEvent(new Event('change', { bubbles: true }));
+      sync(sel);
+    });
+  }
+
+  function readGroups(sel) {
+    var out = [];
+    Array.prototype.forEach.call(sel.children, function (ch) {
+      if (ch.tagName === 'OPTGROUP') {
+        out.push({ name: ch.label, items: Array.prototype.map.call(ch.children, function (o) {
+          return { v: o.value, n: o.textContent };
+        }) });
+      } else if (ch.tagName === 'OPTION') {
+        if (!out.length || out[out.length - 1].name) out.push({ name: '', items: [] });
+        out[out.length - 1].items.push({ v: ch.value, n: ch.textContent });
+      }
+    });
+    return out;
+  }
+
+  function draw(kw) {
+    var k = String(kw || '').trim().toLowerCase();
+    var html = '', total = 0, cur = PICK.sel ? String(PICK.sel.value) : '';
+    PICK.groups.forEach(function (g) {
+      var items = g.items.filter(function (it) {
+        return !k || it.n.toLowerCase().indexOf(k) >= 0 || String(it.v).toLowerCase().indexOf(k) >= 0;
+      });
+      if (!items.length) return;
+      if (g.name) html += '<div class="pkgroup">' + g.name + '</div>';
+      items.forEach(function (it) {
+        total++;
+        html += '<button class="pickitem' + (String(it.v) === cur ? ' on' : '') + '" type="button" data-v="' +
+          String(it.v).replace(/"/g, '&quot;') + '">' + it.n + '</button>';
+      });
+    });
+    BODY.innerHTML = html || '<p style="color:var(--dim);padding:18px 6px;margin:0;font-size:13px">没找到</p>';
+    return total;
+  }
+
+  function sync(sel) {
+    if (!sel || !sel.id) return;
+    var bar = document.querySelector('.selbar[data-pick="' + sel.id + '"]');
+    if (!bar) return;
+    var o = sel.selectedOptions && sel.selectedOptions[0];
+    var tx = bar.querySelector('.tx');
+    if (tx) tx.textContent = o ? o.textContent : '';
+  }
+
+  function open(sel, title) {
+    if (!sel) return;
+    ensure();
+    PICK.sel = sel;
+    PICK.groups = readGroups(sel);
+    FIND.value = '';
+    var n = draw('');
+    TITLE.textContent = title || '选择';
+    FIND.style.display = n > 18 ? 'block' : 'none';
+    MASK.classList.add('on');
+    PANEL.classList.add('on');
+  }
+
+  function close() {
+    if (!PANEL) return;
+    PANEL.classList.remove('on');
+    MASK.classList.remove('on');
+    PICK.sel = null;
+  }
+
+  document.addEventListener('click', function (ev) {
+    var bar = ev.target.closest && ev.target.closest('.selbar');
+    if (!bar) return;
+    open($(bar.getAttribute('data-pick')), bar.getAttribute('data-title'));
+  });
+
+  window.PickSheet = {
+    open: open,
+    close: close,
+    sync: sync,
+    syncAll: function () {
+      var bars = document.querySelectorAll('.selbar');
+      for (var i = 0; i < bars.length; i++) sync($(bars[i].getAttribute('data-pick')));
+    },
+    isOpen: function () { return !!(PANEL && PANEL.classList.contains('on')); }
+  };
+})();
+
+(function () {
+'use strict';
+const $ = id => document.getElementById(id);
+const ENGINE_SRC = $('engine').textContent;
+const M = new Function(ENGINE_SRC + '\nreturn globalThis.MCRNG;')();
+const DATA = M.DATA;
+
+/* ---------- 状态 ---------- */
+const KEY = 'mcrng.v1';
+function loadState() { try { return JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { return {}; } }
+let S = Object.assign({ obs: [], item: 'diamond_sword', citem: 'diamond_sword', sitem: 'diamond_sword', shelf: 15, cshelf2: 15, sshelf: 15 }, loadState());
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
+
+/* ---------- 通用 ---------- */
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+function fillItems(sel, val) {
+  const g = {};
+  DATA.items.forEach(it => { (g[it.group] = g[it.group] || []).push(it); });
+  sel.innerHTML = Object.keys(g).map(k =>
+    '<optgroup label="' + k + '">' + g[k].map(it => '<option value="' + it.key + '">' + it.name + '</option>').join('') + '</optgroup>'
+  ).join('');
+  if (val) sel.value = val;
+}
+function fillNum(sel, val) {
+  sel.innerHTML = Array.from({ length: 16 }, (_, i) => '<option value="' + i + '">' + i + ' 书架</option>').join('');
+  sel.value = String(val);
+}
+function parseSeed(t) {
+  t = String(t).trim().replace(/[\s,_]/g, '');
+  if (!t) return null;
+  let v;
+  if (/^0x[0-9a-f]+$/i.test(t)) v = parseInt(t, 16);
+  else if (/^-?\d+$/.test(t)) v = Number(t);
+  else return null;
+  if (!isFinite(v)) return null;
+  return Math.trunc(v) >>> 0;
+}
+const fmtU = u => String(u >>> 0) + '  (0x' + (u >>> 0).toString(16).toUpperCase() + ')';
+const pct = (a, b) => (b ? (a / b * 100) : 0).toFixed(a / b * 100 >= 10 ? 0 : 1) + '%';
+function copyText(t) {
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(() => toast('已复制'), () => toast('复制失败'));
+  else { const ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); toast('已复制'); } catch (e) { toast('复制失败'); } ta.remove(); }
+}
+let toastT = 0;
+function toast(msg) {
+  let el = $('toast');
+  if (!el) { el = document.createElement('div'); el.id = 'toast'; el.style.cssText = 'position:fixed;left:50%;bottom:32px;transform:translateX(-50%);background:#2a5cf4;color:#fff;padding:9px 16px;border-radius:99px;font-size:13px;z-index:99;opacity:0;transition:opacity .2s'; document.body.appendChild(el); }
+  el.textContent = msg; el.style.opacity = '1';
+  clearTimeout(toastT); toastT = setTimeout(() => { el.style.opacity = '0'; }, 1400);
+}
+function slotCard(s, i) {
+  const need = s.need, usable = s.usable;
+  const tag = usable ? '' : '<span class="tag no">不可选</span>';
+  const list = s.list && s.list.length
+    ? '<div class="enl">' + s.list.map(x => esc(x.name) + ' ' + M.rom(x.lv)).join('　·　') + '</div>'
+    : '<div class="enl mute">（这一档没有附魔）</div>';
+  return '<div class="slot"><div class="slot-h"><div>第 ' + (i + 1) + ' 档 ' + tag +
+    '</div><div class="lv">需 ' + need + ' 级</div></div>' + list + '</div>';
+}
+
+/* ---------- Tab ---------- */
+$('tabs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  Array.from($('tabs').children).forEach(x => x.classList.toggle('on', x === b));
+  Array.from(document.querySelectorAll('.pane')).forEach(p => p.classList.toggle('on', p.id === 'p-' + b.dataset.tab));
+});
+
+/* ---------- 预测 ---------- */
+fillItems($('pitem'), S.item); fillItems($('citem'), S.citem); fillItems($('sitem'), S.sitem);
+fillNum($('cshelf'), 15); fillNum($('cshelf2'), S.cshelf2);
+if (window.PickSheet) PickSheet.syncAll();
+$('pshelf').value = S.shelf; $('pshelfv').textContent = S.shelf;
+$('sshelf').value = S.sshelf; $('sshelfv').textContent = S.sshelf;
+
+$('pitem').onchange = () => { S.item = $('pitem').value; save(); };
+$('citem').onchange = () => { S.citem = $('citem').value; save(); };
+$('sitem').onchange = () => { S.sitem = $('sitem').value; save(); };
+$('pshelf').oninput = () => { S.shelf = +$('pshelf').value; $('pshelfv').textContent = S.shelf; save(); };
+$('sshelf').oninput = () => { S.sshelf = +$('sshelf').value; $('sshelfv').textContent = S.sshelf; save(); };
+$('cshelf2').onchange = () => { S.cshelf2 = +$('cshelf2').value; save(); if (cands) renderCand(); PickSheet.sync($('cshelf2')); };
+$('cshelf').onchange = () => PickSheet.sync($('cshelf'));
+
+$('pgo').onclick = () => {
+  const item = $('pitem').value, b = +$('pshelf').value;
+  const raw = $('pseed').value.trim();
+  const out = $('pout');
+  if (raw) {
+    const sd = parseSeed(raw);
+    if (sd === null) { out.innerHTML = '<div class="card"><p class="warn">种子格式不对：填十进制或 0x 开头的十六进制。</p></div>'; return; }
+    const r = M.predict(sd, item, b);
+    out.innerHTML = '<div class="card"><div class="seedbox"><code>' + fmtU(sd) + '</code></div>' +
+      r.map((s, i) => slotCard(s, i)).join('') + '</div>';
+    S.item = item; save();
+    return;
+  }
+  out.innerHTML = '<div class="card"><div class="stat">模拟 20000 次…</div></div>';
+  setTimeout(() => {
+    const r = M.simulate(item, b, 20000);
+    let h = '<div class="card"><p class="hint" style="margin-top:0">随机 XpSeed 下的分布（20000 次模拟）· ' +
+      esc(DATA.items.find(i => i.key === item).name) + ' · ' + b + ' 书架</p>';
+    h += '<table><tr><th>档位</th><th>花费等级范围</th><th>有附魔的比例</th></tr>';
+    for (let s = 0; s < 3; s++) {
+      const ks = Object.keys(r.lvStat[s]).map(Number);
+      const mn = Math.min.apply(null, ks), mx = Math.max.apply(null, ks);
+      let withE = 0; Object.values(r.multi[s]).forEach(v => withE += v);
+      h += '<tr><td class="n">第 ' + (s + 1) + ' 档</td><td class="n">' + mn + ' – ' + mx + '</td><td class="n">' + pct(withE, r.n) + '</td></tr>';
+    }
+    h += '</table>';
+    for (let s = 0; s < 3; s++) {
+      const arr = Object.keys(r.slotStat[s]).map(k => [k, r.slotStat[s][k]]).sort((a, b) => b[1] - a[1]);
+      h += '<h3>第 ' + (s + 1) + ' 档附魔出现概率</h3><div class="prob">';
+      if (!arr.length) h += '<div class="stat">这一档无法附魔</div>';
+      arr.slice(0, 10).forEach(([k, v]) => {
+        h += '<div><div class="nm">' + esc(k) + '</div><div class="pw"><i style="width:' + Math.min(100, v / r.n * 100 * 2) + '%"></i></div><div class="pv">' + pct(v, r.n) + '</div></div>';
+      });
+      h += '</div>';
+    }
+    h += '</div>';
+    $('pout').innerHTML = h;
+  }, 30);
+};
+
+/* ---------- 破解 ---------- */
+let cands = null, job = null;
+const obsHTML = () => S.obs.length
+  ? S.obs.map((o, i) => '<div class="chip"><i>' + o.b + ' 书架</i>' + o.levels.join(' / ') + '<span class="x" data-i="' + i + '">×</span></div>').join('')
+  : '<div class="hint" style="margin:0">还没有观测</div>';
+const renderObs = () => { $('clist').innerHTML = obsHTML(); };
+const stat = t => { $('cstat').textContent = t; };
+renderObs();
+
+$('clist').addEventListener('click', e => {
+  const x = e.target.closest('span.x'); if (!x) return;
+  S.obs.splice(+x.dataset.i, 1); save(); renderObs();
+  if (cands) { cands = M.filterCandidates(cands, S.obs); renderCand(); }
+});
+
+$('cadd').onclick = () => {
+  const b = +$('cshelf').value;
+  const lv = [0, 1, 2].map(i => parseInt($('c' + i).value, 10));
+  if (lv.some(v => !isFinite(v) || v < 0 || v > 30)) { stat('三档数字都要填 0–30（灰色/不可选填 0）'); return; }
+  const dup = S.obs.findIndex(o => o.b === b);
+  if (dup >= 0) S.obs[dup] = { b: b, levels: lv }; else S.obs.push({ b: b, levels: lv });
+  if (S.obs.length > 8) S.obs.shift();
+  save(); renderObs();
+  const n = S.obs.length;
+  stat('已添加 ' + n + ' 组观测 · 预计候选 ' + (SCALE[n] || '1 个') +
+    (n < 6 ? ' · 再记 ' + (6 - n) + ' 组更容易一次命中' : ' · 可以开始破解'));
+  cands = null; $('cout').innerHTML = '';
+  $('c0').value = $('c1').value = $('c2').value = '';
+};
+
+const WORKER_GLUE = [
+  'self.onmessage = function(e){',
+  '  var d = e.data; if (d.cmd !== "scan") return;',
+  '  var M = self.MCRNG, chks = d.obs.map(function(o){ return M.makeCheckerFast(o.b, o.levels[0], o.levels[1], o.levels[2]); });',
+  '  var out = [], CH = 1 << 21;',
+  '  for (var pos = d.from; pos < d.to; pos += CH) {',
+  '    if (self.__stop) return;',
+  '    var end = Math.min(pos + CH, d.to);',
+  '    M.scanSeeds(chks, pos, end, out);',
+  '    self.postMessage({ type: "p", at: end });',
+  '    if (out.length > 300000) { self.postMessage({ type: "big" }); return; }',
+  '  }',
+  '  self.postMessage({ type: "d", found: out });',
+  '};'
+].join('\n');
+
+function stopJob() {
+  if (!job) return;
+  job.cancel = true;
+  (job.workers || []).forEach(w => { try { w.terminate(); } catch (e) {} });
+  job = null;
+  stat('已停止');
+}
+
+$('cstop').onclick = () => { stopJob(); };
+const SCALE = ['?', '约 1 亿', '约 200 万', '约 1.3 万', '约 800', '约 130', '1 个', '1 个', '1 个'];
+$('crun').onclick = () => {
+  if (S.obs.length < 3) { stat('至少需要 3 组观测（推荐记到 6 组，书架数尽量不同）'); return; }
+  stopJob();
+  const N = 4294967296;
+  const hw = (navigator.hardwareConcurrency || 4) | 0;
+  const nw = Math.max(1, Math.min(6, hw - 1));
+  const st = { at: new Array(nw).fill(0), from: [], t0: Date.now(), workers: [], done: 0, results: [], cancel: false, nw: nw };
+  job = st;
+  $('cbar').style.width = '0%'; $('cout').innerHTML = '';
+  stat('准备中…');
+  const obs = S.obs.map(o => ({ b: o.b, levels: o.levels.slice() }));
+  const slice = Math.floor(N / nw);
+  for (let i = 0; i < nw; i++) st.from.push(i * slice);
+  st.from.push(N);
+
+  const progress = () => {
+    if (!job || job !== st) return;
+    const s = st.at.reduce((a, x) => a + x, 0);
+    const p = Math.min(100, s / N * 100);
+    $('cbar').style.width = p.toFixed(1) + '%';
+    const el = (Date.now() - st.t0) / 1000;
+    const eta = s > 0 ? el * (N - s) / s : 0;
+    stat('已扫描 ' + p.toFixed(1) + '%  ·  会话 ' + nw + ' 线程  ·  剩余约 ' + Math.ceil(eta) + ' 秒');
+  };
+
+  const finish = () => {
+    if (!job || job !== st) return;
+    job = null;
+    $('cbar').style.width = '100%';
+    let all = [];
+    st.results.forEach(a => { all = all.concat(a); });
+    all.sort((a, b) => a - b);
+    cands = all;
+    stat('扫描完成，命中 ' + all.length + ' 个候选（用时 ' + Math.round((Date.now() - st.t0) / 1000) + ' 秒）');
+    renderCand();
+  };
+
+  let url = null;
+  try { url = URL.createObjectURL(new Blob([ENGINE_SRC + '\n' + WORKER_GLUE], { type: 'application/javascript' })); } catch (e) { url = null; }
+  if (url && typeof Worker !== 'undefined') {
+    try {
+      for (let i = 0; i < nw; i++) {
+        const w = new Worker(url);
+        w.onmessage = ev => {
+          const d = ev.data;
+          if (!job || job !== st) return;
+          if (d.type === 'p') { st.at[i] = d.at - st.from[i]; progress(); }
+          else if (d.type === 'd') { st.results.push(d.found); st.done++; if (st.done === nw) { finish(); try { URL.revokeObjectURL(url); } catch (e) {} } }
+          else if (d.type === 'big') { st.cancel = true; (st.workers || []).forEach(x => { try { x.terminate(); } catch (e) {} }); job = null; stat('候选太多：请先多加两组观测再扫'); }
+        };
+        w.onerror = () => { st.cancel = true; };
+        w.postMessage({ cmd: 'scan', obs: obs, from: st.from[i], to: st.from[i + 1] });
+        st.workers.push(w);
+      }
+      progress();
+      return;
+    } catch (e) { url = null; }
+  }
+  /* 单线程回退 */
+  const chks = obs.map(o => M.makeCheckerFast(o.b, o.levels[0], o.levels[1], o.levels[2]));
+  const out = [];
+  let pos = 0;
+  const stepFn = () => {
+    if (!job || job !== st) return;
+    const end = Math.min(pos + (1 << 21), N);
+    M.scanSeeds(chks, pos, end, out);
+    pos = end; st.at[0] = pos; progress();
+    if (pos < N) setTimeout(stepFn, 0);
+    else { st.results.push(out); st.done = st.nw; finish(); }
+  };
+  setTimeout(stepFn, 0);
+};
+
+function renderCand() {
+  const b = +$('cshelf2').value;
+  const item = $('citem').value;
+  const itn = (DATA.items.find(i => i.key === item) || {}).name || item;
+  if (!cands) return;
+  if (!cands.length) {
+    $('cout').innerHTML = '<div class="card"><h3 style="margin-top:0">没有匹配的种子</h3><p>观测之间互相矛盾：可能数字记错、书架数不对，或者服务器改了附魔台逻辑。检查后重新添加观测再扫。</p></div>';
+    return;
+  }
+  if (cands.length === 1) {
+    const sd = cands[0];
+    const r = M.predict(sd, item, b);
+    $('cout').innerHTML = '<div class="card"><div class="k">找到唯一 XpSeed</div><div class="seedbox" style="margin-top:8px"><code>' +
+      fmtU(sd) + '</code><button id="cp">复制</button></div>' +
+      '<p class="hint" style="margin:0 0 8px">' + esc(itn) + ' · ' + b + ' 书架</p>' +
+      r.map((s, i) => slotCard(s, i)).join('') +
+      '<button class="btn ghost" id="tos">填入刷种页的种子 A</button></div>';
+    $('cp').onclick = () => copyText(String(sd));
+    $('tos').onclick = () => { $('s1').value = String(sd); $('s2').value = ''; $('s2').focus && $('s2').focus(); toast('已填入种子 A，附魔一次后再破解填种子 B'); };
+    return;
+  }
+  const show = cands.slice(0, 30);
+  $('cout').innerHTML = '<div class="card"><h3 style="margin-top:0">还有 ' + cands.length + ' 个候选</h3>' +
+    '<p>再加一组不同书架数的观测（点上面的「添加这组观测」），候选会立刻被筛掉，不用重新扫描。</p>' +
+    '<table><tr><th>#</th><th>XpSeed</th></tr>' +
+    show.map((u, i) => '<tr><td class="n">' + (i + 1) + '</td><td class="n" style="white-space:normal">' + fmtU(u) + '</td></tr>').join('') +
+    '</table>' + (cands.length > show.length ? '<p class="hint">只列出前 30 个</p>' : '') + '</div>';
+}
+
+/* ---------- 刷种 ---------- */
+$('sgo').onclick = () => {
+  const a = parseSeed($('s1').value), c = parseSeed($('s2').value);
+  const item = $('sitem').value, b = +$('sshelf').value;
+  const out = $('sout');
+  if (a === null || c === null) { out.innerHTML = '<div class="card"><p class="warn">两个种子都要填（十进制或 0x 十六进制）。</p></div>'; return; }
+  const st = M.solveState(a, c);
+  if (st === null) { out.innerHTML = '<div class="card"><p class="warn">这两个种子不是相邻的 nextInt 输出，无法反推状态。确认种子 B 是附魔一次后立刻破解的结果，中间没做别的事。</p></div>'; return; }
+  let h = '<div class="card"><div class="k">玩家随机数状态（48 位）</div>' +
+    '<div class="seedbox" style="margin-top:8px"><code>' + st.toString(16).toUpperCase().padStart(12, '0') + '</code>' +
+    '<button id="cpst">复制</button></div>' +
+    '<p class="hint" style="margin:0 0 10px">每次附魔 = 1 次 nextInt；每投出一件物品 = 4 次 nextFloat。下表是投掷 n 件之后的下一次附魔会用的种子。</p>' +
+    '<table><tr><th>投掷</th><th>下一次附魔（' + esc((DATA.items.find(i => i.key === item) || {}).name || item) + ' · ' + b + ' 书架）</th></tr>';
+  for (let t = 0; t <= 8; t++) {
+    const seed = M.seedAfterThrows(st, t);
+    const r = M.predict(seed, item, b);
+    const cell = r.map((s, i) => {
+      const nm = s.list && s.list.length ? s.list.map(x => x.name + M.rom(x.lv)).join('+') : '—';
+      return '<span style="color:#6b7585">' + (i + 1) + '</span> <span style="color:#7d8798;font-size:11px">需' +
+        s.need + '级</span> ' + esc(nm);
+    }).join('<br>');
+    h += '<tr><td class="n">' + t + ' 件<br><span class="hint" style="font-size:11px">' + seed + '</span></td><td>' + cell + '</td></tr>';
+  }
+  h += '</table>';
+  h += '<p class="hint">进游戏核对：三档显示的等级数字要和上表「需 N 级」完全一致，说明随机数状态没错位；不一致就是中途有别的动作消耗了玩家随机数，需要重新破解。</p></div>';
+  out.innerHTML = h;
+  $('cpst').onclick = () => copyText(st.toString());
+};
+})();
+
+/* 返回按钮：回到向导主界面（App 内叫 index.html，下载目录版叫 附魔台RNG向导.html）
+   同时用内联样式强制固定，避免个别 WebView 对 .fix 类样式解析失效导致按钮跟着页面滚走 */
+(function () {
+  function satTop() {
+    var v = '';
+    try { v = getComputedStyle(document.documentElement).getPropertyValue('--sat').trim(); } catch (e) {}
+    if (!v) v = 'env(safe-area-inset-top,0px)';
+    return 'calc(8px + ' + v + ')';
+  }
+  function pin() {
+    var b = document.getElementById('backBtn');
+    if (!b) return;
+    // 只有独立教程页需要脱离文档流固定；标签版里的按钮在 sticky 标题栏内，保持原样
+    if (!b.classList.contains('fix')) return;
+    b.style.setProperty('position', 'fixed', 'important');
+    b.style.setProperty('left', '12px', 'important');
+    b.style.setProperty('top', satTop(), 'important');
+    b.style.setProperty('z-index', '9999', 'important');
+    b.style.setProperty('margin', '0', 'important');
+    b.style.setProperty('width', 'auto', 'important');
+    b.style.setProperty('max-width', '40%', 'important');
+  }
+  function backTarget() {
+    var p = '';
+    try { p = decodeURIComponent(location.pathname); } catch (e) { p = location.pathname || ''; }
+    var zh = /[\u4e00-\u9fa5]/.test(p);
+    var t = zh ? '附魔台RNG向导.html' : 'index.html';
+    var th = document.documentElement.getAttribute('data-theme');
+    if (th === 'light' || th === 'dark') t += '#theme=' + th;
+    return t;
+  }
+  // 自愈：若该 WebView 对 position:fixed 支持异常（按钮跟着文档滚走），
+  // 改用绝对定位 + 滚动同步，保证始终贴在屏幕左上角
+  var fixedOk = true, satPx = 0;
+  function readSat() {
+    var v = '';
+    try { v = getComputedStyle(document.documentElement).getPropertyValue('--sat').trim(); } catch (e) {}
+    var m = /^([0-9.]+)px$/.exec(v);
+    satPx = m ? parseFloat(m[1]) : 0;
+  }
+  function follow() {
+    var b = document.getElementById('backBtn');
+    if (!b) return;
+    var y = (window.pageYOffset || document.documentElement.scrollTop || 0) + 8 + satPx;
+    b.style.setProperty('top', y + 'px', 'important');
+  }
+  function onScroll() {
+    var b = document.getElementById('backBtn');
+    if (!b || !b.classList.contains('fix')) return;
+    if (fixedOk) {
+      var r = b.getBoundingClientRect();
+      if (r.top > 80 || r.bottom < 0) {
+        fixedOk = false;
+        readSat();
+        b.style.setProperty('position', 'absolute', 'important');
+        follow();
+      }
+    } else {
+      follow();
+    }
+  }
+  window.__backTarget = backTarget;
+  window.__pinBack = pin;
+  function start() { pin(); readSat(); try { window.addEventListener('scroll', onScroll, { passive: true }); } catch (e) {} }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+  else start();
+  document.addEventListener('click', function (e) {
+    var n = e.target;
+    while (n && n !== document.body) {
+      if (n.id === 'backBtn' || (n.className && String(n.className).indexOf('backbtn') >= 0)) {
+        e.preventDefault();
+        try { location.href = backTarget(); } catch (err) {}
+        return;
+      }
+      n = n.parentNode;
+    }
+  }, false);
+})();
+
+</script>
+</body>
+</html>

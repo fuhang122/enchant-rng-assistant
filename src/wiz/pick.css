@@ -1,0 +1,28 @@
+.nat{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;border:0;padding:0;overflow:hidden}
+.selbar{flex:1;min-width:0;display:flex;align-items:center;gap:10px;justify-content:space-between;
+ background:var(--input);border:1px solid var(--line2);border-radius:11px;padding:13px 14px;
+ color:var(--fg);font-size:15px;font-family:inherit;text-align:left}
+.selbar .tx{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.selbar .cv{color:var(--dim);font-size:13px;flex:0 0 auto}
+.selbar:active{filter:brightness(1.12)}
+.pickmask{position:fixed;left:0;right:0;top:0;bottom:0;background:rgba(0,0,0,.55);z-index:70;
+ opacity:0;pointer-events:none;transition:opacity .18s}
+.pickmask.on{opacity:1;pointer-events:auto}
+.pickpanel{position:fixed;left:0;right:0;bottom:0;z-index:71;background:var(--card);
+ border-top:1px solid var(--line2);border-radius:20px 20px 0 0;
+ max-height:78vh;display:flex;flex-direction:column;
+ padding:14px 14px calc(14px + var(--sab,0px) + env(safe-area-inset-bottom));
+ transform:translateY(101%);transition:transform .22s cubic-bezier(.2,.9,.3,1)}
+.pickpanel.on{transform:translateY(0)}
+.pickhead{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px}
+.pickhead b{font-size:15px;font-weight:800}
+.pickhead button{background:none;border:0;color:var(--dim);font-size:22px;line-height:1;padding:0 4px;font-family:inherit}
+.pkfind{width:100%;box-sizing:border-box;background:var(--input);border:1px solid var(--line2);border-radius:10px;
+ padding:12px;color:var(--fg);font-size:15px;font-family:inherit;margin:0 0 8px}
+.pkbody{overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;flex:1 1 auto;min-height:0}
+.pkgroup{color:var(--dim);font-size:11.5px;letter-spacing:.4px;margin:12px 6px 4px}
+.pickitem{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);
+ color:var(--fg);font-size:15px;font-family:inherit;padding:14px 8px}
+.pickitem.on{color:var(--accent);font-weight:700}
+.pickitem:last-child{border-bottom:0}
+.pickitem:active{background:var(--card2)}

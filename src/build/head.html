@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101319">
+<title>附魔台 RNG 助手</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:#101319;color:#e7ecf3;
+ font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC",system-ui,sans-serif}
+body{padding-bottom:0}
+.wrap{max-width:720px;margin:0 auto;padding:0 12px calc(40px + var(--sab,0px))}
+.topbar{position:sticky;top:0;z-index:12;margin:0 -12px;padding:calc(var(--sat,0px) + 8px) 12px 0;
+ background:#101319;border-bottom:1px solid #232835}
+header{padding:2px 2px 7px}
+header h1{margin:0;font-size:19px;letter-spacing:.5px}
+header .sub{color:#7d8798;font-size:12px;margin-top:2px}
+.tabs{display:flex;gap:6px;padding:2px 0 8px}
+.tabs button{flex:1;padding:10px 0;border:1px solid #232835;background:#171b23;color:#9aa5b6;
+ border-radius:10px;font-size:14px;font-weight:600}
+.tabs button.on{background:#2a5cf4;border-color:#2a5cf4;color:#fff}
+.pane{display:none}.pane.on{display:block}
+.card{background:#171b23;border:1px solid #232835;border-radius:14px;padding:12px;margin-bottom:12px}
+.row{display:flex;align-items:center;gap:10px;margin:8px 0}
+.row>span{width:64px;color:#98a3b4;font-size:13px;flex:0 0 auto}
+.row select,.row input[type=text],.row input[type=number]{flex:1;min-width:0;background:#0e1117;color:#e7ecf3;
+ border:1px solid #2a3140;border-radius:9px;padding:10px;font-size:15px;appearance:none}
+.row input[type=range]{flex:1;accent-color:#2a5cf4;height:26px}
+.row b{width:26px;text-align:right;color:#cfd8e6;font-variant-numeric:tabular-nums}
+.row3{display:flex;gap:8px;margin:10px 0 4px}
+.row3 input{flex:1;min-width:0;background:#0e1117;color:#e7ecf3;border:1px solid #2a3140;border-radius:9px;
+ padding:12px 6px;font-size:16px;text-align:center}
+button{font-family:inherit}
+.btn{width:100%;padding:13px;border-radius:11px;border:1px solid #2a3140;background:#1e2430;color:#dbe3ef;
+ font-size:15px;font-weight:600;margin-top:10px}
+.btn.primary{background:#2a5cf4;border-color:#2a5cf4;color:#fff}
+.btn.ghost{background:#12161d}
+.btn:active{filter:brightness(1.15)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{display:flex;align-items:center;gap:6px;background:#1f2632;border:1px solid #2c3546;
+ border-radius:8px;padding:6px 8px;font-size:13px;font-variant-numeric:tabular-nums}
+.chip i{color:#7d8798;font-style:normal;font-size:11px}
+.chip span.x{color:#e0555f;font-weight:700;padding:0 2px}
+.hint{color:#7d8798;font-size:12.5px;line-height:1.5;margin:8px 0 0}
+.stat{color:#98a3b4;font-size:13px;margin-top:8px;min-height:18px;font-variant-numeric:tabular-nums}
+.bar{height:6px;background:#0e1117;border-radius:99px;overflow:hidden;margin-top:10px;border:1px solid #232835}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#2a5cf4,#59d0a4);transition:width .15s}
+.slot{background:#131722;border:1px solid #232835;border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.slot-h{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#98a3b4}
+.slot-h .lv{color:#e7ecf3;font-weight:700;font-variant-numeric:tabular-nums}
+.slot-h .tag{font-size:11px;padding:2px 6px;border-radius:6px;border:1px solid #2c3546;color:#8f9aab}
+.slot-h .tag.no{color:#e0555f;border-color:#4a2a30}
+.enl{font-size:15px;margin-top:6px;color:#dfe7f2}
+.enl.mute{color:#6b7585;font-size:13.5px}
+.prob{margin-top:8px}
+.prob div{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:13px}
+.prob .nm{flex:0 0 40%;color:#c8d2e0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.prob .pw{flex:1;height:7px;background:#0e1117;border-radius:99px;overflow:hidden}
+.prob .pw i{display:block;height:100%;background:#3d78ff}
+.prob .pv{flex:0 0 44px;text-align:right;color:#8f9aab;font-variant-numeric:tabular-nums}
+.seedbox{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.seedbox code{background:#0e1117;border:1px solid #2a3140;border-radius:8px;padding:7px 9px;font-size:14px;
+ color:#7fe3b0;font-family:ui-monospace,Menlo,monospace;word-break:break-all}
+.seedbox button{padding:8px 12px;border-radius:8px;border:1px solid #2a3140;background:#1e2430;color:#dbe3ef;font-size:13px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:7px 6px;border-bottom:1px solid #1d2330;vertical-align:top}
+th{color:#7d8798;font-weight:600;font-size:12px}
+td.n{color:#c8d2e0;font-variant-numeric:tabular-nums;white-space:nowrap}
+.k{color:#8f9aab;font-size:13px}
+h3{font-size:14px;margin:16px 0 6px;color:#cfd8e6}
+p{margin:8px 0;color:#a9b4c4;font-size:13.5px;line-height:1.65}
+ul{margin:6px 0 6px 18px;padding:0;color:#a9b4c4;font-size:13.5px;line-height:1.65}
+li{margin:4px 0}
+code.inl{background:#0e1117;border:1px solid #232835;border-radius:5px;padding:1px 5px;
+ font-family:ui-monospace,Menlo,monospace;font-size:12.5px;color:#8fd6ff}
+.warn{color:#e0a355}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="topbar">
+<div class="backrow"><a class="backbtn" id="backBtn" href="index.html"><span class="arw">‹</span>返回</a></div>
+<header>
+  <h1>附魔台 RNG 助手</h1>
+  <div class="sub">Minecraft Java 1.21 · XpSeed 预测 / 破解 · 全程离线</div>
+</header>
+<nav class="tabs" id="tabs">
+  <button data-tab="predict" class="on">预测</button>
+  <button data-tab="crack">破解</button>
+  <button data-tab="chain">刷种</button>
+  <button data-tab="help">说明</button>
+</nav>
+<main>
+<section id="p-predict" class="pane on">
+  <div class="card">
+    <div class="row"><span>物品</span><select id="pitem" class="nat"></select><button class="selbar" type="button" data-pick="pitem" data-title="物品"><span class="tx"></span><span class="cv">▾</span></button></div>
+    <label class="row"><span>书架</span><input id="pshelf" type="range" min="0" max="15" step="1" value="15"><b id="pshelfv">15</b></label>
+    <label class="row"><span>XpSeed</span><input id="pseed" type="text" inputmode="numeric" placeholder="留空 = 概率模拟"></label>
+    <button class="btn primary" id="pgo">计算</button>
+    <p class="hint">填了 XpSeed 就是三档的精确结果；留空则按 2 万次随机种子模拟出每档的出现概率。</p>
+  </div>
+  <div id="pout"></div>
+</section>
+
+<section id="p-crack" class="pane">
+  <div class="card">
+    <p class="hint" style="margin-top:0">把物品放上附魔台，记下三档显示的花费等级。同一个 XpSeed 下，改变周围书架数量可以再记一组（数字会变，但种子不变）。记满 6 组（如 15/13/10/6/3/0）时几乎一次就能锁定。</p>
+    <div class="row"><span>书架</span><select id="cshelf" class="nat"></select><button class="selbar" type="button" data-pick="cshelf" data-title="书架"><span class="tx"></span><span class="cv">▾</span></button></div>
+    <div class="row3">
+      <input id="c0" type="number" inputmode="numeric" placeholder="上档">
+      <input id="c1" type="number" inputmode="numeric" placeholder="中档">
+      <input id="c2" type="number" inputmode="numeric" placeholder="下档">
+    </div>
+    <button class="btn" id="cadd">添加这组观测</button>
+    <div id="clist" class="chips"></div>
+    <div class="row" style="margin-top:14px"><span>物品</span><select id="citem" class="nat"></select><button class="selbar" type="button" data-pick="citem" data-title="物品"><span class="tx"></span><span class="cv">▾</span></button></div>
+    <div class="row"><span>展现书架</span><select id="cshelf2" class="nat"></select><button class="selbar" type="button" data-pick="cshelf2" data-title="展现书架"><span class="tx"></span><span class="cv">▾</span></button></div>
+    <button class="btn primary" id="crun">开始破解</button>
+    <button class="btn ghost" id="cstop">停止扫描</button>
+    <div class="bar"><i id="cbar"></i></div>
+    <div class="stat" id="cstat"></div>
+  </div>
+  <div id="cout"></div>
+</section>
+
+<section id="p-chain" class="pane">
+  <div class="card">
+    <label class="row"><span>种子 A</span><input id="s1" type="text" inputmode="numeric" placeholder="第一次破解得到的种子"></label>
+    <label class="row"><span>种子 B</span><input id="s2" type="text" inputmode="numeric" placeholder="附魔一次后再破解得到的种子"></label>
+    <div class="row"><span>物品</span><select id="sitem" class="nat"></select><button class="selbar" type="button" data-pick="sitem" data-title="物品"><span class="tx"></span><span class="cv">▾</span></button></div>
+    <label class="row"><span>书架</span><input id="sshelf" type="range" min="0" max="15" step="1" value="15"><b id="sshelfv">15</b></label>
+    <button class="btn primary" id="sgo">求解随机数状态</button>
+    <p class="hint">种子 B 必须是种子 A 的下一个 <code class="inl">nextInt()</code>：也就是附魔一次之后、不做任何其他动作再破解一次。两者相邻才能反推出玩家随机数的 48 位内部状态，从而推算之后的每一次附魔。</p>
+  </div>
+  <div id="sout"></div>
+</section>
+
+<section id="p-help" class="pane">
+  <div class="card">
+    <h3>它是怎么运作的</h3>
+    <p>Java 版附魔台的结果不是当场随机掷出来的，而是由玩家存档里的 <code class="inl">XpSeed</code>（32 位整数）决定的。同一个种子在同一书架数量下，只要物品的附魔能力和可用附魔集合相同，三个选项就完全固定 —— 所以先看清、再决定要不要附魔。</p>
+    <p>三档显示的花费等级是这样算出来的：对每一档连续取两个随机数，
+      <code class="inl">i = nextInt(8) + 1 + 书架/2 + nextInt(书架+1)</code>，再按档位换算。三个档位一共用掉 6 个随机数，随后每一档再用 <code class="inl">XpSeed + 档位</code> 重新播种，独立生成附魔列表。</p>
+    <p>反过来，只要记下不同书架数量下的三档数字，就能在大约 43 亿个种子里筛出符合的那一个 —— 这就是「破解」。一般 3~4 组不同书架数的观测就能锁定唯一解。</p>
+    <h3>破解的注意点</h3>
+    <ul>
+      <li>记录时三档数字必须是同一个种子下的，也就是中途别附魔、别换物品种类。</li>
+      <li><b>别疾跑、别挖方块、别合成、别丢东西</b>：这些动作会推进玩家随机数（疾跑最容易被忽略）。为了改书架数而放/挖方块是例外。</li>
+      <li>书架数量要准确（被方块挡住的书架不计入），最多 15。</li>
+      <li>数字填你看到的等级花费；某档灰色/不可选就填 0。</li>
+      <li>一组观测不够：3 组不同书架数（例如 15、10、6）通常能筛到 1~2 个候选，再加第 4 组立刻唯一。</li>
+      <li>服务器装了改附魔台逻辑的插件时结果会不符，此时破不出来。</li>
+    </ul>
+    <h3>刷种（附魔顺序）</h3>
+    <p>附魔一次，种子就换成玩家随机数的下一个 <code class="inl">nextInt()</code>。连续两次破解得到相邻的两个种子后，就能反推玩家随机数的 48 位状态，并且知道「投掉 n 件物品再附魔」会换成哪个种子 —— 每投出一件物品会消耗 4 次 <code class="inl">nextFloat()</code>。于是可以提前算好：投几件、第几档，就能拿到想要的附魔。</p>
+    <p class="warn">前提是中途别做其他消耗玩家随机数的动作（吃东西的粒子、暴击、钓鱼等），否则序列会错位。它按原版 1.21 行为推导。</p>
+    <h3>数据与算法</h3>
+    <ul>
+      <li>附魔数据取自 26.3 原版数据包，并与 1.21.4–1.21.10 逐字段核对过（36 个非宝物附魔的权重、等级花费区间、可用物品、互斥组）；1.21.9 的铜制装备、1.21.11 的长矛与突刺附魔均已包含。</li>
+      <li>随机数按 <code class="inl">java.util.Random</code> 线性同余实现，等级公式与 <code class="inl">EnchantmentHelper.generateEnchantments</code> 已逐条复刻。</li>
+      <li>多附魔的连续判定按 (剩余等级+1)/50 的概率继续，等级减半；概率结果由模拟得出，与实操可能有极小误差。</li>
+      <li>同一档里附魔的挑选顺序按原版注册顺序（字母序），1.20 及更早的版本可能出现个别差异。</li>
+    </ul>
+    <p class="hint">本工具只是离线计算器，不改游戏文件、不连服务器。</p>
+  </div>
+</section>
+</main>
+</div>
+<script id="engine" type="text/plain">

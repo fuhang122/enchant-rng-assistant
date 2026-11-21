@@ -1,0 +1,2128 @@
+{
+"items": [
+{
+"key": "wooden_sword",
+"name": "木剑",
+"en": 15,
+"tags": [
+"sword",
+"melee_weapon",
+"sharp_weapon",
+"weapon",
+"durability",
+"fire_aspect",
+"vanishing"
+],
+"group": "剑"
+},
+{
+"key": "stone_sword",
+"name": "石剑",
+"en": 5,
+"tags": [
+"sword",
+"melee_weapon",
+"sharp_weapon",
+"weapon",
+"durability",
+"fire_aspect",
+"vanishing"
+],
+"group": "剑"
+},
+{
+"key": "copper_sword",
+"name": "铜剑",
+"en": 13,
+"tags": [
+"sword",
+"melee_weapon",
+"sharp_weapon",
+"weapon",
+"durability",
+"fire_aspect",
+"vanishing"
+],
+"group": "剑"
+},
+{
+"key": "iron_sword",
+"name": "铁剑",
+"en": 14,
+"tags": [
+"sword",
+"melee_weapon",
+"sharp_weapon",
+"weapon",
+"durability",
+"fire_aspect",
+"vanishing"
+],
+"group": "剑"
+},
+{
+"key": "golden_sword",
+"name": "金剑",
+"en": 22,
+"tags": [
+"sword",
+"melee_weapon",
+"sharp_weapon",
+"weapon",
+"durability",
+"fire_aspect",
+"vanishing"
+],
+"group": "剑"
+},
+{
+"key": "diamond_sword",
+"name": "钻石剑",
+"en": 10,
+"tags": [
+"sword",
+"melee_weapon",
+"sharp_weapon",
+"weapon",
+"durability",
+"fire_aspect",
+"vanishing"
+],
+"group": "剑"
+},
+{
+"key": "netherite_sword",
+"name": "下界合金剑",
+"en": 15,
+"tags": [
+"sword",
+"melee_weapon",
+"sharp_weapon",
+"weapon",
+"durability",
+"fire_aspect",
+"vanishing"
+],
+"group": "剑"
+},
+{
+"key": "wooden_axe",
+"name": "木斧",
+"en": 15,
+"tags": [
+"axe",
+"mining",
+"mining_loot",
+"sharp_weapon",
+"weapon",
+"durability",
+"vanishing"
+],
+"group": "斧"
+},
+{
+"key": "stone_axe",
+"name": "石斧",
+"en": 5,
+"tags": [
+"axe",
+"mining",
+"mining_loot",
+"sharp_weapon",
+"weapon",
+"durability",
+"vanishing"
+],
+"group": "斧"
+},
+{
+"key": "copper_axe",
+"name": "铜斧",
+"en": 13,
+"tags": [
+"axe",
+"mining",
+"mining_loot",
+"sharp_weapon",
+"weapon",
+"durability",
+"vanishing"
+],
+"group": "斧"
+},
+{
+"key": "iron_axe",
+"name": "铁斧",
+"en": 14,
+"tags": [
+"axe",
+"mining",
+"mining_loot",
+"sharp_weapon",
+"weapon",
+"durability",
+"vanishing"
+],
+"group": "斧"
+},
+{
+"key": "golden_axe",
+"name": "金斧",
+"en": 22,
+"tags": [
+"axe",
+"mining",
+"mining_loot",
+"sharp_weapon",
+"weapon",
+"durability",
+"vanishing"
+],
+"group": "斧"
+},
+{
+"key": "diamond_axe",
+"name": "钻石斧",
+"en": 10,
+"tags": [
+"axe",
+"mining",
+"mining_loot",
+"sharp_weapon",
+"weapon",
+"durability",
+"vanishing"
+],
+"group": "斧"
+},
+{
+"key": "netherite_axe",
+"name": "下界合金斧",
+"en": 15,
+"tags": [
+"axe",
+"mining",
+"mining_loot",
+"sharp_weapon",
+"weapon",
+"durability",
+"vanishing"
+],
+"group": "斧"
+},
+{
+"key": "wooden_pickaxe",
+"name": "木镐",
+"en": 15,
+"tags": [
+"pickaxe",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "镐"
+},
+{
+"key": "stone_pickaxe",
+"name": "石镐",
+"en": 5,
+"tags": [
+"pickaxe",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "镐"
+},
+{
+"key": "copper_pickaxe",
+"name": "铜镐",
+"en": 13,
+"tags": [
+"pickaxe",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "镐"
+},
+{
+"key": "iron_pickaxe",
+"name": "铁镐",
+"en": 14,
+"tags": [
+"pickaxe",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "镐"
+},
+{
+"key": "golden_pickaxe",
+"name": "金镐",
+"en": 22,
+"tags": [
+"pickaxe",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "镐"
+},
+{
+"key": "diamond_pickaxe",
+"name": "钻石镐",
+"en": 10,
+"tags": [
+"pickaxe",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "镐"
+},
+{
+"key": "netherite_pickaxe",
+"name": "下界合金镐",
+"en": 15,
+"tags": [
+"pickaxe",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "镐"
+},
+{
+"key": "wooden_shovel",
+"name": "木锹",
+"en": 15,
+"tags": [
+"shovel",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "锹"
+},
+{
+"key": "stone_shovel",
+"name": "石锹",
+"en": 5,
+"tags": [
+"shovel",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "锹"
+},
+{
+"key": "copper_shovel",
+"name": "铜锹",
+"en": 13,
+"tags": [
+"shovel",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "锹"
+},
+{
+"key": "iron_shovel",
+"name": "铁锹",
+"en": 14,
+"tags": [
+"shovel",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "锹"
+},
+{
+"key": "golden_shovel",
+"name": "金锹",
+"en": 22,
+"tags": [
+"shovel",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "锹"
+},
+{
+"key": "diamond_shovel",
+"name": "钻石锹",
+"en": 10,
+"tags": [
+"shovel",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "锹"
+},
+{
+"key": "netherite_shovel",
+"name": "下界合金锹",
+"en": 15,
+"tags": [
+"shovel",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "锹"
+},
+{
+"key": "wooden_hoe",
+"name": "木锄",
+"en": 15,
+"tags": [
+"hoe",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "锄"
+},
+{
+"key": "stone_hoe",
+"name": "石锄",
+"en": 5,
+"tags": [
+"hoe",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "锄"
+},
+{
+"key": "copper_hoe",
+"name": "铜锄",
+"en": 13,
+"tags": [
+"hoe",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "锄"
+},
+{
+"key": "iron_hoe",
+"name": "铁锄",
+"en": 14,
+"tags": [
+"hoe",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "锄"
+},
+{
+"key": "golden_hoe",
+"name": "金锄",
+"en": 22,
+"tags": [
+"hoe",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "锄"
+},
+{
+"key": "diamond_hoe",
+"name": "钻石锄",
+"en": 10,
+"tags": [
+"hoe",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "锄"
+},
+{
+"key": "netherite_hoe",
+"name": "下界合金锄",
+"en": 15,
+"tags": [
+"hoe",
+"mining",
+"mining_loot",
+"durability",
+"vanishing"
+],
+"group": "锄"
+},
+{
+"key": "leather_helmet",
+"name": "皮革头盔",
+"en": 15,
+"tags": [
+"head_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "头盔"
+},
+{
+"key": "chainmail_helmet",
+"name": "锁链头盔",
+"en": 12,
+"tags": [
+"head_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "头盔"
+},
+{
+"key": "copper_helmet",
+"name": "铜头盔",
+"en": 8,
+"tags": [
+"head_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "头盔"
+},
+{
+"key": "iron_helmet",
+"name": "铁头盔",
+"en": 9,
+"tags": [
+"head_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "头盔"
+},
+{
+"key": "golden_helmet",
+"name": "金头盔",
+"en": 25,
+"tags": [
+"head_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "头盔"
+},
+{
+"key": "diamond_helmet",
+"name": "钻石头盔",
+"en": 10,
+"tags": [
+"head_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "头盔"
+},
+{
+"key": "netherite_helmet",
+"name": "下界合金头盔",
+"en": 15,
+"tags": [
+"head_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "头盔"
+},
+{
+"key": "leather_chestplate",
+"name": "皮革胸甲",
+"en": 15,
+"tags": [
+"chest_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "盔甲"
+},
+{
+"key": "chainmail_chestplate",
+"name": "锁链胸甲",
+"en": 12,
+"tags": [
+"chest_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "盔甲"
+},
+{
+"key": "copper_chestplate",
+"name": "铜胸甲",
+"en": 8,
+"tags": [
+"chest_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "盔甲"
+},
+{
+"key": "iron_chestplate",
+"name": "铁胸甲",
+"en": 9,
+"tags": [
+"chest_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "盔甲"
+},
+{
+"key": "golden_chestplate",
+"name": "金胸甲",
+"en": 25,
+"tags": [
+"chest_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "盔甲"
+},
+{
+"key": "diamond_chestplate",
+"name": "钻石胸甲",
+"en": 10,
+"tags": [
+"chest_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "盔甲"
+},
+{
+"key": "netherite_chestplate",
+"name": "下界合金胸甲",
+"en": 15,
+"tags": [
+"chest_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "盔甲"
+},
+{
+"key": "leather_leggings",
+"name": "皮革护腿",
+"en": 15,
+"tags": [
+"leg_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "护腿"
+},
+{
+"key": "chainmail_leggings",
+"name": "锁链护腿",
+"en": 12,
+"tags": [
+"leg_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "护腿"
+},
+{
+"key": "copper_leggings",
+"name": "铜护腿",
+"en": 8,
+"tags": [
+"leg_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "护腿"
+},
+{
+"key": "iron_leggings",
+"name": "铁护腿",
+"en": 9,
+"tags": [
+"leg_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "护腿"
+},
+{
+"key": "golden_leggings",
+"name": "金护腿",
+"en": 25,
+"tags": [
+"leg_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "护腿"
+},
+{
+"key": "diamond_leggings",
+"name": "钻石护腿",
+"en": 10,
+"tags": [
+"leg_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "护腿"
+},
+{
+"key": "netherite_leggings",
+"name": "下界合金护腿",
+"en": 15,
+"tags": [
+"leg_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "护腿"
+},
+{
+"key": "leather_boots",
+"name": "皮革靴子",
+"en": 15,
+"tags": [
+"foot_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "靴子"
+},
+{
+"key": "chainmail_boots",
+"name": "锁链靴子",
+"en": 12,
+"tags": [
+"foot_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "靴子"
+},
+{
+"key": "copper_boots",
+"name": "铜靴子",
+"en": 8,
+"tags": [
+"foot_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "靴子"
+},
+{
+"key": "iron_boots",
+"name": "铁靴子",
+"en": 9,
+"tags": [
+"foot_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "靴子"
+},
+{
+"key": "golden_boots",
+"name": "金靴子",
+"en": 25,
+"tags": [
+"foot_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "靴子"
+},
+{
+"key": "diamond_boots",
+"name": "钻石靴子",
+"en": 10,
+"tags": [
+"foot_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "靴子"
+},
+{
+"key": "netherite_boots",
+"name": "下界合金靴子",
+"en": 15,
+"tags": [
+"foot_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "靴子"
+},
+{
+"key": "turtle_helmet",
+"name": "海龟壳",
+"en": 9,
+"tags": [
+"head_armor",
+"armor",
+"durability",
+"equippable",
+"vanishing"
+],
+"group": "头盔"
+},
+{
+"key": "bow",
+"name": "弓",
+"en": 1,
+"tags": [
+"bow",
+"durability",
+"vanishing"
+],
+"group": "远程"
+},
+{
+"key": "crossbow",
+"name": "弩",
+"en": 1,
+"tags": [
+"crossbow",
+"durability",
+"vanishing"
+],
+"group": "远程"
+},
+{
+"key": "trident",
+"name": "三叉戟",
+"en": 1,
+"tags": [
+"trident",
+"durability",
+"vanishing"
+],
+"group": "远程"
+},
+{
+"key": "fishing_rod",
+"name": "钓鱼竿",
+"en": 1,
+"tags": [
+"fishing",
+"durability",
+"vanishing"
+],
+"group": "工具"
+},
+{
+"key": "mace",
+"name": "重锤",
+"en": 15,
+"tags": [
+"mace",
+"weapon",
+"durability",
+"fire_aspect",
+"vanishing"
+],
+"group": "工具"
+},
+{
+"key": "shears",
+"name": "剪刀",
+"en": 1,
+"tags": [
+"mining",
+"durability",
+"vanishing"
+],
+"group": "工具"
+},
+{
+"key": "book",
+"name": "书（附魔书）",
+"en": 1,
+"tags": [],
+"group": "其他"
+},
+{
+"key": "wooden_spear",
+"name": "木矛",
+"en": 15,
+"tags": [
+"spear",
+"melee_weapon",
+"sharp_weapon",
+"weapon",
+"durability",
+"fire_aspect",
+"vanishing"
+],
+"group": "长矛（1.21.11+）"
+},
+{
+"key": "stone_spear",
+"name": "石矛",
+"en": 5,
+"tags": [
+"spear",
+"melee_weapon",
+"sharp_weapon",
+"weapon",
+"durability",
+"fire_aspect",
+"vanishing"
+],
+"group": "长矛（1.21.11+）"
+},
+{
+"key": "copper_spear",
+"name": "铜矛",
+"en": 13,
+"tags": [
+"spear",
+"melee_weapon",
+"sharp_weapon",
+"weapon",
+"durability",
+"fire_aspect",
+"vanishing"
+],
+"group": "长矛（1.21.11+）"
+},
+{
+"key": "iron_spear",
+"name": "铁矛",
+"en": 14,
+"tags": [
+"spear",
+"melee_weapon",
+"sharp_weapon",
+"weapon",
+"durability",
+"fire_aspect",
+"vanishing"
+],
+"group": "长矛（1.21.11+）"
+},
+{
+"key": "golden_spear",
+"name": "金矛",
+"en": 22,
+"tags": [
+"spear",
+"melee_weapon",
+"sharp_weapon",
+"weapon",
+"durability",
+"fire_aspect",
+"vanishing"
+],
+"group": "长矛（1.21.11+）"
+},
+{
+"key": "diamond_spear",
+"name": "钻石矛",
+"en": 10,
+"tags": [
+"spear",
+"melee_weapon",
+"sharp_weapon",
+"weapon",
+"durability",
+"fire_aspect",
+"vanishing"
+],
+"group": "长矛（1.21.11+）"
+},
+{
+"key": "netherite_spear",
+"name": "下界合金矛",
+"en": 15,
+"tags": [
+"spear",
+"melee_weapon",
+"sharp_weapon",
+"weapon",
+"durability",
+"fire_aspect",
+"vanishing"
+],
+"group": "长矛（1.21.11+）"
+}
+],
+"ench": [
+{
+"id": "aqua_affinity",
+"name": "水下速掘",
+"max": 1,
+"w": 2,
+"minB": 1,
+"minP": 0,
+"maxB": 41,
+"maxP": 0,
+"sup": [
+"chainmail_helmet",
+"copper_helmet",
+"diamond_helmet",
+"golden_helmet",
+"iron_helmet",
+"leather_helmet",
+"netherite_helmet",
+"turtle_helmet"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "bane_of_arthropods",
+"name": "节肢杀手",
+"max": 5,
+"w": 5,
+"minB": 5,
+"minP": 8,
+"maxB": 25,
+"maxP": 8,
+"sup": [
+"copper_axe",
+"copper_spear",
+"copper_sword",
+"diamond_axe",
+"diamond_spear",
+"diamond_sword",
+"golden_axe",
+"golden_spear",
+"golden_sword",
+"iron_axe",
+"iron_spear",
+"iron_sword",
+"mace",
+"netherite_axe",
+"netherite_spear",
+"netherite_sword",
+"stone_axe",
+"stone_spear",
+"stone_sword",
+"wooden_axe",
+"wooden_spear",
+"wooden_sword"
+],
+"pri": [
+"copper_spear",
+"copper_sword",
+"diamond_spear",
+"diamond_sword",
+"golden_spear",
+"golden_sword",
+"iron_spear",
+"iron_sword",
+"netherite_spear",
+"netherite_sword",
+"stone_spear",
+"stone_sword",
+"wooden_spear",
+"wooden_sword"
+],
+"excl": "damage"
+},
+{
+"id": "blast_protection",
+"name": "爆炸保护",
+"max": 4,
+"w": 2,
+"minB": 5,
+"minP": 8,
+"maxB": 13,
+"maxP": 8,
+"sup": [
+"chainmail_boots",
+"chainmail_chestplate",
+"chainmail_helmet",
+"chainmail_leggings",
+"copper_boots",
+"copper_chestplate",
+"copper_helmet",
+"copper_leggings",
+"diamond_boots",
+"diamond_chestplate",
+"diamond_helmet",
+"diamond_leggings",
+"golden_boots",
+"golden_chestplate",
+"golden_helmet",
+"golden_leggings",
+"iron_boots",
+"iron_chestplate",
+"iron_helmet",
+"iron_leggings",
+"leather_boots",
+"leather_chestplate",
+"leather_helmet",
+"leather_leggings",
+"netherite_boots",
+"netherite_chestplate",
+"netherite_helmet",
+"netherite_leggings",
+"turtle_helmet"
+],
+"pri": [],
+"excl": "armor"
+},
+{
+"id": "breach",
+"name": "破甲",
+"max": 4,
+"w": 2,
+"minB": 15,
+"minP": 9,
+"maxB": 65,
+"maxP": 9,
+"sup": [
+"mace"
+],
+"pri": [],
+"excl": "damage"
+},
+{
+"id": "channeling",
+"name": "引雷",
+"max": 1,
+"w": 1,
+"minB": 25,
+"minP": 0,
+"maxB": 50,
+"maxP": 0,
+"sup": [
+"trident"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "density",
+"name": "密度",
+"max": 5,
+"w": 5,
+"minB": 5,
+"minP": 8,
+"maxB": 25,
+"maxP": 8,
+"sup": [
+"mace"
+],
+"pri": [],
+"excl": "damage"
+},
+{
+"id": "depth_strider",
+"name": "深海探索者",
+"max": 3,
+"w": 2,
+"minB": 10,
+"minP": 10,
+"maxB": 25,
+"maxP": 10,
+"sup": [
+"chainmail_boots",
+"copper_boots",
+"diamond_boots",
+"golden_boots",
+"iron_boots",
+"leather_boots",
+"netherite_boots"
+],
+"pri": [],
+"excl": "boots"
+},
+{
+"id": "efficiency",
+"name": "效率",
+"max": 5,
+"w": 10,
+"minB": 1,
+"minP": 10,
+"maxB": 51,
+"maxP": 10,
+"sup": [
+"copper_axe",
+"copper_hoe",
+"copper_pickaxe",
+"copper_shovel",
+"diamond_axe",
+"diamond_hoe",
+"diamond_pickaxe",
+"diamond_shovel",
+"golden_axe",
+"golden_hoe",
+"golden_pickaxe",
+"golden_shovel",
+"iron_axe",
+"iron_hoe",
+"iron_pickaxe",
+"iron_shovel",
+"netherite_axe",
+"netherite_hoe",
+"netherite_pickaxe",
+"netherite_shovel",
+"shears",
+"stone_axe",
+"stone_hoe",
+"stone_pickaxe",
+"stone_shovel",
+"wooden_axe",
+"wooden_hoe",
+"wooden_pickaxe",
+"wooden_shovel"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "feather_falling",
+"name": "摔落保护",
+"max": 4,
+"w": 5,
+"minB": 5,
+"minP": 6,
+"maxB": 11,
+"maxP": 6,
+"sup": [
+"chainmail_boots",
+"copper_boots",
+"diamond_boots",
+"golden_boots",
+"iron_boots",
+"leather_boots",
+"netherite_boots"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "fire_aspect",
+"name": "火焰附加",
+"max": 2,
+"w": 2,
+"minB": 10,
+"minP": 20,
+"maxB": 60,
+"maxP": 20,
+"sup": [
+"copper_spear",
+"copper_sword",
+"diamond_spear",
+"diamond_sword",
+"golden_spear",
+"golden_sword",
+"iron_spear",
+"iron_sword",
+"mace",
+"netherite_spear",
+"netherite_sword",
+"stone_spear",
+"stone_sword",
+"wooden_spear",
+"wooden_sword"
+],
+"pri": [
+"copper_spear",
+"copper_sword",
+"diamond_spear",
+"diamond_sword",
+"golden_spear",
+"golden_sword",
+"iron_spear",
+"iron_sword",
+"netherite_spear",
+"netherite_sword",
+"stone_spear",
+"stone_sword",
+"wooden_spear",
+"wooden_sword"
+],
+"excl": null
+},
+{
+"id": "fire_protection",
+"name": "火焰保护",
+"max": 4,
+"w": 5,
+"minB": 10,
+"minP": 8,
+"maxB": 18,
+"maxP": 8,
+"sup": [
+"chainmail_boots",
+"chainmail_chestplate",
+"chainmail_helmet",
+"chainmail_leggings",
+"copper_boots",
+"copper_chestplate",
+"copper_helmet",
+"copper_leggings",
+"diamond_boots",
+"diamond_chestplate",
+"diamond_helmet",
+"diamond_leggings",
+"golden_boots",
+"golden_chestplate",
+"golden_helmet",
+"golden_leggings",
+"iron_boots",
+"iron_chestplate",
+"iron_helmet",
+"iron_leggings",
+"leather_boots",
+"leather_chestplate",
+"leather_helmet",
+"leather_leggings",
+"netherite_boots",
+"netherite_chestplate",
+"netherite_helmet",
+"netherite_leggings",
+"turtle_helmet"
+],
+"pri": [],
+"excl": "armor"
+},
+{
+"id": "flame",
+"name": "火矢",
+"max": 1,
+"w": 2,
+"minB": 20,
+"minP": 0,
+"maxB": 50,
+"maxP": 0,
+"sup": [
+"bow"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "fortune",
+"name": "时运",
+"max": 3,
+"w": 2,
+"minB": 15,
+"minP": 9,
+"maxB": 65,
+"maxP": 9,
+"sup": [
+"copper_axe",
+"copper_hoe",
+"copper_pickaxe",
+"copper_shovel",
+"diamond_axe",
+"diamond_hoe",
+"diamond_pickaxe",
+"diamond_shovel",
+"golden_axe",
+"golden_hoe",
+"golden_pickaxe",
+"golden_shovel",
+"iron_axe",
+"iron_hoe",
+"iron_pickaxe",
+"iron_shovel",
+"netherite_axe",
+"netherite_hoe",
+"netherite_pickaxe",
+"netherite_shovel",
+"stone_axe",
+"stone_hoe",
+"stone_pickaxe",
+"stone_shovel",
+"wooden_axe",
+"wooden_hoe",
+"wooden_pickaxe",
+"wooden_shovel"
+],
+"pri": [],
+"excl": "mining"
+},
+{
+"id": "impaling",
+"name": "穿刺",
+"max": 5,
+"w": 2,
+"minB": 1,
+"minP": 8,
+"maxB": 21,
+"maxP": 8,
+"sup": [
+"trident"
+],
+"pri": [],
+"excl": "damage"
+},
+{
+"id": "infinity",
+"name": "无限",
+"max": 1,
+"w": 1,
+"minB": 20,
+"minP": 0,
+"maxB": 50,
+"maxP": 0,
+"sup": [
+"bow"
+],
+"pri": [],
+"excl": "bow"
+},
+{
+"id": "knockback",
+"name": "击退",
+"max": 2,
+"w": 5,
+"minB": 5,
+"minP": 20,
+"maxB": 55,
+"maxP": 20,
+"sup": [
+"copper_spear",
+"copper_sword",
+"diamond_spear",
+"diamond_sword",
+"golden_spear",
+"golden_sword",
+"iron_spear",
+"iron_sword",
+"netherite_spear",
+"netherite_sword",
+"stone_spear",
+"stone_sword",
+"wooden_spear",
+"wooden_sword"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "looting",
+"name": "抢夺",
+"max": 3,
+"w": 2,
+"minB": 15,
+"minP": 9,
+"maxB": 65,
+"maxP": 9,
+"sup": [
+"copper_spear",
+"copper_sword",
+"diamond_spear",
+"diamond_sword",
+"golden_spear",
+"golden_sword",
+"iron_spear",
+"iron_sword",
+"netherite_spear",
+"netherite_sword",
+"stone_spear",
+"stone_sword",
+"wooden_spear",
+"wooden_sword"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "loyalty",
+"name": "忠诚",
+"max": 3,
+"w": 5,
+"minB": 12,
+"minP": 7,
+"maxB": 50,
+"maxP": 0,
+"sup": [
+"trident"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "luck_of_the_sea",
+"name": "海之眷顾",
+"max": 3,
+"w": 2,
+"minB": 15,
+"minP": 9,
+"maxB": 65,
+"maxP": 9,
+"sup": [
+"fishing_rod"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "lunge",
+"name": "突刺",
+"max": 3,
+"w": 5,
+"minB": 5,
+"minP": 8,
+"maxB": 25,
+"maxP": 8,
+"sup": [
+"copper_spear",
+"diamond_spear",
+"golden_spear",
+"iron_spear",
+"netherite_spear",
+"stone_spear",
+"wooden_spear"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "lure",
+"name": "饵钓",
+"max": 3,
+"w": 2,
+"minB": 15,
+"minP": 9,
+"maxB": 65,
+"maxP": 9,
+"sup": [
+"fishing_rod"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "multishot",
+"name": "多重射击",
+"max": 1,
+"w": 2,
+"minB": 20,
+"minP": 0,
+"maxB": 50,
+"maxP": 0,
+"sup": [
+"crossbow"
+],
+"pri": [],
+"excl": "crossbow"
+},
+{
+"id": "piercing",
+"name": "穿透",
+"max": 4,
+"w": 10,
+"minB": 1,
+"minP": 10,
+"maxB": 50,
+"maxP": 0,
+"sup": [
+"crossbow"
+],
+"pri": [],
+"excl": "crossbow"
+},
+{
+"id": "power",
+"name": "力量",
+"max": 5,
+"w": 10,
+"minB": 1,
+"minP": 10,
+"maxB": 16,
+"maxP": 10,
+"sup": [
+"bow"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "projectile_protection",
+"name": "弹射物保护",
+"max": 4,
+"w": 5,
+"minB": 3,
+"minP": 6,
+"maxB": 9,
+"maxP": 6,
+"sup": [
+"chainmail_boots",
+"chainmail_chestplate",
+"chainmail_helmet",
+"chainmail_leggings",
+"copper_boots",
+"copper_chestplate",
+"copper_helmet",
+"copper_leggings",
+"diamond_boots",
+"diamond_chestplate",
+"diamond_helmet",
+"diamond_leggings",
+"golden_boots",
+"golden_chestplate",
+"golden_helmet",
+"golden_leggings",
+"iron_boots",
+"iron_chestplate",
+"iron_helmet",
+"iron_leggings",
+"leather_boots",
+"leather_chestplate",
+"leather_helmet",
+"leather_leggings",
+"netherite_boots",
+"netherite_chestplate",
+"netherite_helmet",
+"netherite_leggings",
+"turtle_helmet"
+],
+"pri": [],
+"excl": "armor"
+},
+{
+"id": "protection",
+"name": "保护",
+"max": 4,
+"w": 10,
+"minB": 1,
+"minP": 11,
+"maxB": 12,
+"maxP": 11,
+"sup": [
+"chainmail_boots",
+"chainmail_chestplate",
+"chainmail_helmet",
+"chainmail_leggings",
+"copper_boots",
+"copper_chestplate",
+"copper_helmet",
+"copper_leggings",
+"diamond_boots",
+"diamond_chestplate",
+"diamond_helmet",
+"diamond_leggings",
+"golden_boots",
+"golden_chestplate",
+"golden_helmet",
+"golden_leggings",
+"iron_boots",
+"iron_chestplate",
+"iron_helmet",
+"iron_leggings",
+"leather_boots",
+"leather_chestplate",
+"leather_helmet",
+"leather_leggings",
+"netherite_boots",
+"netherite_chestplate",
+"netherite_helmet",
+"netherite_leggings",
+"turtle_helmet"
+],
+"pri": [],
+"excl": "armor"
+},
+{
+"id": "punch",
+"name": "冲击",
+"max": 2,
+"w": 2,
+"minB": 12,
+"minP": 20,
+"maxB": 37,
+"maxP": 20,
+"sup": [
+"bow"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "quick_charge",
+"name": "快速装填",
+"max": 3,
+"w": 5,
+"minB": 12,
+"minP": 20,
+"maxB": 50,
+"maxP": 0,
+"sup": [
+"crossbow"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "respiration",
+"name": "水下呼吸",
+"max": 3,
+"w": 2,
+"minB": 10,
+"minP": 10,
+"maxB": 40,
+"maxP": 10,
+"sup": [
+"chainmail_helmet",
+"copper_helmet",
+"diamond_helmet",
+"golden_helmet",
+"iron_helmet",
+"leather_helmet",
+"netherite_helmet",
+"turtle_helmet"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "riptide",
+"name": "激流",
+"max": 3,
+"w": 2,
+"minB": 17,
+"minP": 7,
+"maxB": 50,
+"maxP": 0,
+"sup": [
+"trident"
+],
+"pri": [],
+"excl": "riptide"
+},
+{
+"id": "sharpness",
+"name": "锋利",
+"max": 5,
+"w": 10,
+"minB": 1,
+"minP": 11,
+"maxB": 21,
+"maxP": 11,
+"sup": [
+"copper_axe",
+"copper_spear",
+"copper_sword",
+"diamond_axe",
+"diamond_spear",
+"diamond_sword",
+"golden_axe",
+"golden_spear",
+"golden_sword",
+"iron_axe",
+"iron_spear",
+"iron_sword",
+"netherite_axe",
+"netherite_spear",
+"netherite_sword",
+"stone_axe",
+"stone_spear",
+"stone_sword",
+"wooden_axe",
+"wooden_spear",
+"wooden_sword"
+],
+"pri": [
+"copper_spear",
+"copper_sword",
+"diamond_spear",
+"diamond_sword",
+"golden_spear",
+"golden_sword",
+"iron_spear",
+"iron_sword",
+"netherite_spear",
+"netherite_sword",
+"stone_spear",
+"stone_sword",
+"wooden_spear",
+"wooden_sword"
+],
+"excl": "damage"
+},
+{
+"id": "silk_touch",
+"name": "精准采集",
+"max": 1,
+"w": 1,
+"minB": 15,
+"minP": 0,
+"maxB": 65,
+"maxP": 0,
+"sup": [
+"copper_axe",
+"copper_hoe",
+"copper_pickaxe",
+"copper_shovel",
+"diamond_axe",
+"diamond_hoe",
+"diamond_pickaxe",
+"diamond_shovel",
+"golden_axe",
+"golden_hoe",
+"golden_pickaxe",
+"golden_shovel",
+"iron_axe",
+"iron_hoe",
+"iron_pickaxe",
+"iron_shovel",
+"netherite_axe",
+"netherite_hoe",
+"netherite_pickaxe",
+"netherite_shovel",
+"stone_axe",
+"stone_hoe",
+"stone_pickaxe",
+"stone_shovel",
+"wooden_axe",
+"wooden_hoe",
+"wooden_pickaxe",
+"wooden_shovel"
+],
+"pri": [],
+"excl": "mining"
+},
+{
+"id": "smite",
+"name": "亡灵杀手",
+"max": 5,
+"w": 5,
+"minB": 5,
+"minP": 8,
+"maxB": 25,
+"maxP": 8,
+"sup": [
+"copper_axe",
+"copper_spear",
+"copper_sword",
+"diamond_axe",
+"diamond_spear",
+"diamond_sword",
+"golden_axe",
+"golden_spear",
+"golden_sword",
+"iron_axe",
+"iron_spear",
+"iron_sword",
+"mace",
+"netherite_axe",
+"netherite_spear",
+"netherite_sword",
+"stone_axe",
+"stone_spear",
+"stone_sword",
+"wooden_axe",
+"wooden_spear",
+"wooden_sword"
+],
+"pri": [
+"copper_spear",
+"copper_sword",
+"diamond_spear",
+"diamond_sword",
+"golden_spear",
+"golden_sword",
+"iron_spear",
+"iron_sword",
+"netherite_spear",
+"netherite_sword",
+"stone_spear",
+"stone_sword",
+"wooden_spear",
+"wooden_sword"
+],
+"excl": "damage"
+},
+{
+"id": "sweeping_edge",
+"name": "横扫之刃",
+"max": 3,
+"w": 2,
+"minB": 5,
+"minP": 9,
+"maxB": 20,
+"maxP": 9,
+"sup": [
+"copper_sword",
+"diamond_sword",
+"golden_sword",
+"iron_sword",
+"netherite_sword",
+"stone_sword",
+"wooden_sword"
+],
+"pri": [],
+"excl": null
+},
+{
+"id": "thorns",
+"name": "荆棘",
+"max": 3,
+"w": 1,
+"minB": 10,
+"minP": 20,
+"maxB": 60,
+"maxP": 20,
+"sup": [
+"chainmail_boots",
+"chainmail_chestplate",
+"chainmail_helmet",
+"chainmail_leggings",
+"copper_boots",
+"copper_chestplate",
+"copper_helmet",
+"copper_leggings",
+"diamond_boots",
+"diamond_chestplate",
+"diamond_helmet",
+"diamond_leggings",
+"golden_boots",
+"golden_chestplate",
+"golden_helmet",
+"golden_leggings",
+"iron_boots",
+"iron_chestplate",
+"iron_helmet",
+"iron_leggings",
+"leather_boots",
+"leather_chestplate",
+"leather_helmet",
+"leather_leggings",
+"netherite_boots",
+"netherite_chestplate",
+"netherite_helmet",
+"netherite_leggings",
+"turtle_helmet"
+],
+"pri": [
+"chainmail_chestplate",
+"copper_chestplate",
+"diamond_chestplate",
+"golden_chestplate",
+"iron_chestplate",
+"leather_chestplate",
+"netherite_chestplate"
+],
+"excl": null
+},
+{
+"id": "unbreaking",
+"name": "耐久",
+"max": 3,
+"w": 5,
+"minB": 5,
+"minP": 8,
+"maxB": 55,
+"maxP": 8,
+"sup": [
+"bow",
+"chainmail_boots",
+"chainmail_chestplate",
+"chainmail_helmet",
+"chainmail_leggings",
+"copper_axe",
+"copper_boots",
+"copper_chestplate",
+"copper_helmet",
+"copper_hoe",
+"copper_leggings",
+"copper_pickaxe",
+"copper_shovel",
+"copper_spear",
+"copper_sword",
+"crossbow",
+"diamond_axe",
+"diamond_boots",
+"diamond_chestplate",
+"diamond_helmet",
+"diamond_hoe",
+"diamond_leggings",
+"diamond_pickaxe",
+"diamond_shovel",
+"diamond_spear",
+"diamond_sword",
+"fishing_rod",
+"golden_axe",
+"golden_boots",
+"golden_chestplate",
+"golden_helmet",
+"golden_hoe",
+"golden_leggings",
+"golden_pickaxe",
+"golden_shovel",
+"golden_spear",
+"golden_sword",
+"iron_axe",
+"iron_boots",
+"iron_chestplate",
+"iron_helmet",
+"iron_hoe",
+"iron_leggings",
+"iron_pickaxe",
+"iron_shovel",
+"iron_spear",
+"iron_sword",
+"leather_boots",
+"leather_chestplate",
+"leather_helmet",
+"leather_leggings",
+"mace",
+"netherite_axe",
+"netherite_boots",
+"netherite_chestplate",
+"netherite_helmet",
+"netherite_hoe",
+"netherite_leggings",
+"netherite_pickaxe",
+"netherite_shovel",
+"netherite_spear",
+"netherite_sword",
+"shears",
+"stone_axe",
+"stone_hoe",
+"stone_pickaxe",
+"stone_shovel",
+"stone_spear",
+"stone_sword",
+"trident",
+"turtle_helmet",
+"wooden_axe",
+"wooden_hoe",
+"wooden_pickaxe",
+"wooden_shovel",
+"wooden_spear",
+"wooden_sword"
+],
+"pri": [],
+"excl": null
+}
+],
+"excl": {
+"armor": [
+"protection",
+"blast_protection",
+"fire_protection",
+"projectile_protection"
+],
+"boots": [
+"frost_walker",
+"depth_strider"
+],
+"bow": [
+"infinity",
+"mending"
+],
+"crossbow": [
+"multishot",
+"piercing"
+],
+"damage": [
+"sharpness",
+"smite",
+"bane_of_arthropods",
+"impaling",
+"density",
+"breach"
+],
+"mining": [
+"fortune",
+"silk_touch"
+],
+"riptide": [
+"loyalty",
+"channeling"
+]
+}
+}

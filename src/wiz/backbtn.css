@@ -1,0 +1,10 @@
+/* 左上角返回按钮（教程页 / 标签版共用） */
+.backbtn{display:inline-flex;align-items:center;gap:3px;padding:8px 14px 8px 11px;border-radius:999px;
+ background:var(--card,#1b2029);border:1px solid var(--line,#262d3a);color:var(--fg,#e7ecf3);
+ font:inherit;font-size:13.5px;line-height:1;text-decoration:none;cursor:pointer;
+ -webkit-tap-highlight-color:transparent}
+.backbtn:active{transform:scale(.96);filter:brightness(1.18)}
+.backbtn .arw{font-size:17px;margin:-2px 1px 0 -2px;opacity:.85}
+.backbtn.fix{position:fixed;left:12px;top:calc(8px + var(--sat,0px));z-index:60;
+ box-shadow:0 3px 12px rgba(0,0,0,.32)}
+.backrow{margin:0 0 7px}

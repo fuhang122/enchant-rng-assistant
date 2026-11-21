@@ -1,0 +1,15 @@
+node_modules/
+__pycache__/
+*.pyc
+# 构建产物
+src/wiz/wizard.html
+src/build/app_themed.html
+src/build/tutorial_themed.html
+src/build/core.js
+# 打包相关
+*.apk
+*.idsig
+apk-src/build/
+apk-src/classes/
+apk-src/dexout/
+apk-src/gen/

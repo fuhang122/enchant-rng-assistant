@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101319">
+<title>附魔台 RNG 详细教程</title>
+<style>
+:root{--bg:#101319;--card:#171b23;--card2:#131722;--input:#0e1117;--line:#232835;--line2:#2a3140;--btn:#1e2430;--chip:#1f2632;--chipline:#2c3546;--sel:#141c30;--fg:#e7ecf3;--fg2:#c8d2e0;--mute:#98a3b4;--dim:#7d8798;--dimmer:#6b7585;--accent:#2a5cf4;--accentfg:#fff;--ok:#59d0a4;--okfg:#7fe3b0;--okline:#1f5c42;--okbg:#123024;--bad:#ff8b96;--badline:#5c232c;--badbg:#33171c;--warn:#e0a355}
+:root[data-theme="light"]{--bg:#f3f5fa;--card:#ffffff;--card2:#f7f9fd;--input:#eef1f7;--line:#e3e8f0;--line2:#d7dde8;--btn:#eef1f7;--chip:#f1f4f9;--chipline:#dde3ec;--sel:#e9f0ff;--fg:#151a22;--fg2:#3d4756;--mute:#5f6a7a;--dim:#7a8494;--dimmer:#8c94a2;--accent:#2a5cf4;--accentfg:#fff;--ok:#12a06a;--okfg:#0a7a4d;--okline:#9fd8c2;--okbg:#e9f7f0;--bad:#d8303f;--badline:#e8b6bd;--badbg:#fdeef0;--warn:#9a6100}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);
+ font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC",system-ui,sans-serif}
+body{padding-bottom:0}
+.wrap{max-width:720px;margin:0 auto;padding:calc(52px + var(--sat,0px)) 12px calc(40px + var(--sab,0px))}
+.topbar{position:sticky;top:0;z-index:12;margin:0 -12px;padding:calc(var(--sat,0px) + 8px) 12px 0;
+ background:var(--bg);border-bottom:1px solid var(--line)}
+header{padding:2px 2px 7px}
+header h1{margin:0;font-size:19px;letter-spacing:.5px}
+header .sub{color:var(--dim);font-size:12px;margin-top:2px}
+.tabs{display:flex;gap:6px;padding:2px 0 8px}
+.tabs button{flex:1;padding:10px 0;border:1px solid var(--line);background:var(--card);color:var(--mute);
+ border-radius:10px;font-size:14px;font-weight:600}
+.tabs button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.pane{display:none}.pane.on{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:12px}
+.row{display:flex;align-items:center;gap:10px;margin:8px 0}
+.row>span{width:64px;color:var(--mute);font-size:13px;flex:0 0 auto}
+.row select,.row input[type=text],.row input[type=number]{flex:1;min-width:0;background:var(--input);color:var(--fg);
+ border:1px solid var(--line2);border-radius:9px;padding:10px;font-size:15px;appearance:none}
+.row input[type=range]{flex:1;accent-color:var(--accent);height:26px}
+.row b{width:26px;text-align:right;color:var(--fg2);font-variant-numeric:tabular-nums}
+.row3{display:flex;gap:8px;margin:10px 0 4px}
+.row3 input{flex:1;min-width:0;background:var(--input);color:var(--fg);border:1px solid var(--line2);border-radius:9px;
+ padding:12px 6px;font-size:16px;text-align:center}
+button{font-family:inherit}
+.btn{width:100%;padding:13px;border-radius:11px;border:1px solid var(--line2);background:var(--btn);color:var(--fg);
+ font-size:15px;font-weight:600;margin-top:10px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.ghost{background:var(--btn)}
+.btn:active{filter:brightness(1.15)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{display:flex;align-items:center;gap:6px;background:var(--chip);border:1px solid var(--chipline);
+ border-radius:8px;padding:6px 8px;font-size:13px;font-variant-numeric:tabular-nums}
+.chip i{color:var(--dim);font-style:normal;font-size:11px}
+.chip span.x{color:var(--bad);font-weight:700;padding:0 2px}
+.hint{color:var(--dim);font-size:12.5px;line-height:1.5;margin:8px 0 0}
+.stat{color:var(--mute);font-size:13px;margin-top:8px;min-height:18px;font-variant-numeric:tabular-nums}
+.bar{height:6px;background:var(--input);border-radius:99px;overflow:hidden;margin-top:10px;border:1px solid var(--line)}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--ok));transition:width .15s}
+.slot{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.slot-h{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--mute)}
+.slot-h .lv{color:var(--fg);font-weight:700;font-variant-numeric:tabular-nums}
+.slot-h .tag{font-size:11px;padding:2px 6px;border-radius:6px;border:1px solid var(--chipline);color:var(--mute)}
+.slot-h .tag.no{color:var(--bad);border-color:var(--badline)}
+.enl{font-size:15px;margin-top:6px;color:var(--fg)}
+.enl.mute{color:var(--dimmer);font-size:13.5px}
+.prob{margin-top:8px}
+.prob div{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:13px}
+.prob .nm{flex:0 0 40%;color:var(--fg2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.prob .pw{flex:1;height:7px;background:var(--input);border-radius:99px;overflow:hidden}
+.prob .pw i{display:block;height:100%;background:var(--accent)}
+.prob .pv{flex:0 0 44px;text-align:right;color:var(--mute);font-variant-numeric:tabular-nums}
+.seedbox{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.seedbox code{background:var(--input);border:1px solid var(--line2);border-radius:8px;padding:7px 9px;font-size:14px;
+ color:var(--okfg);font-family:ui-monospace,Menlo,monospace;word-break:break-all}
+.seedbox button{padding:8px 12px;border-radius:8px;border:1px solid var(--line2);background:var(--btn);color:var(--fg);font-size:13px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:7px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--dim);font-weight:600;font-size:12px}
+td.n{color:var(--fg2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.k{color:var(--mute);font-size:13px}
+h3{font-size:14px;margin:16px 0 6px;color:var(--fg2)}
+p{margin:8px 0;color:var(--mute);font-size:13.5px;line-height:1.65}
+ul{margin:6px 0 6px 18px;padding:0;color:var(--mute);font-size:13.5px;line-height:1.65}
+li{margin:4px 0}
+code.inl{background:var(--input);border:1px solid var(--line);border-radius:5px;padding:1px 5px;
+ font-family:ui-monospace,Menlo,monospace;font-size:12.5px;color:var(--accent)}
+.warn{color:var(--warn)}
+
+/* 左上角返回按钮（教程页 / 标签版共用） */
+.backbtn{display:inline-flex;align-items:center;gap:3px;padding:8px 14px 8px 11px;border-radius:999px;
+ background:var(--card,var(--card));border:1px solid var(--line,var(--line2));color:var(--fg,var(--fg));
+ font:inherit;font-size:13.5px;line-height:1;text-decoration:none;cursor:pointer;
+ -webkit-tap-highlight-color:transparent}
+.backbtn:active{transform:scale(.96);filter:brightness(1.18)}
+.backbtn .arw{font-size:17px;margin:-2px 1px 0 -2px;opacity:.85}
+.backbtn.fix{position:fixed;left:12px;top:calc(8px + var(--sat,0px));z-index:60;
+ box-shadow:0 3px 12px rgba(0,0,0,.32)}
+.backrow{margin:0 0 7px}
+
+.toc{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0 0}
+.toc a{display:block;background:var(--card);border:1px solid var(--line2);border-radius:9px;padding:9px 10px;
+ color:var(--fg2);text-decoration:none;font-size:13px}
+.toc a b{color:var(--accent);margin-right:6px}
+b.hl{color:var(--okfg)}
+.tagok{display:inline-block;background:var(--okbg);border:1px solid var(--okline);color:var(--okfg);border-radius:6px;
+ font-size:11px;padding:1px 6px;vertical-align:1px}
+.tagbad{display:inline-block;background:var(--badbg);border:1px solid var(--badline);color:var(--bad);border-radius:6px;
+ font-size:11px;padding:1px 6px;vertical-align:1px}
+</style>
+<script>(function(){
+var t=null;
+try{ var m=/[?&#]theme=(light|dark|auto)/.exec(location.search+location.hash); if(m) t=m[1]; }catch(e){}
+if(!t){ try{ var s=JSON.parse(localStorage.getItem('mcrng.wizard.v1')||'{}'); if(s&&(s.theme==='light'||s.theme==='dark')) t=s.theme; }catch(e){} }
+if(!t) t='auto';
+var mq=window.matchMedia?window.matchMedia('(prefers-color-scheme: light)'):null;
+function cur(){ return t==='auto'?((mq&&mq.matches)?'light':'dark'):t; }
+function ap(){
+  var c=cur();
+  document.documentElement.setAttribute('data-theme', c);
+  try{ if(window.AndroidHost&&AndroidHost.setTheme) AndroidHost.setTheme(c==='light'); }catch(e){}
+}
+ap(); if(mq&&mq.addEventListener) mq.addEventListener('change',function(){ if(t==='auto') ap(); });
+try{ if(window.AndroidHost&&AndroidHost.ready) AndroidHost.ready(); }catch(e){}
+})();</script>
+</head>
+<body class="hasback">
+<a class="backbtn fix" id="backBtn" href="index.html"><span class="arw">‹</span>返回</a>
+<div class="wrap">
+<header>
+  <h1>附魔台 RNG 详细教程</h1>
+  <div class="sub">配套工具：附魔台RNG助手.html（同目录）· 内容对应 Minecraft Java 1.21</div>
+</header>
+
+<div class="card">
+  <h3 style="margin-top:0">五分钟速通版</h3>
+  <ol>
+    <li><b>摆好 15 书架</b>，把想附魔的物品放上台子，记下三档数字（例如 <code class="inl">6 / 11 / 30</code>）。</li>
+    <li><b>改书架数量</b>（挡掉几个），再记一组。凑到 6 组：15、13、10、6、3、0。</li>
+    <li>App 的<b>破解</b>页逐组录入 → 开始破解（手机约 20~60 秒）→ 得到唯一的 <code class="inl">XpSeed</code>。</li>
+    <li>同一页会显示这个种子下三档<b>真正会给什么附魔</b>。想要就直接附魔；不想要见第 6 节「刷种」。</li>
+  </ol>
+  <div class="toc">
+    <a href="#s1"><b>1</b>原理（够用就行）</a>
+    <a href="#s2"><b>2</b>准备工作</a>
+    <a href="#s3"><b>3</b>记录观测</a>
+    <a href="#s4"><b>4</b>破解</a>
+    <a href="#s5"><b>5</b>读懂结果</a>
+    <a href="#s6"><b>6</b>刷种</a>
+    <a href="#s7"><b>7</b>实战剧本</a>
+    <a href="#s8"><b>8</b>常见问题</a>
+  </div>
+</div>
+
+<div class="card" id="s1">
+  <h3 style="margin-top:0">1. 原理：为什么能提前知道结果</h3>
+  <p><b>结论先说：</b>Java 版附魔台给什么附魔，完全由一个 32 位整数 <code class="inl">XpSeed</code> 决定。这个数字存在你的玩家数据里，附魔一次就换一个新的。知道它，就等于知道这次、下次、下下次会出什么。</p>
+  <h3>1.1 三档数字是怎么来的</h3>
+  <p>打开界面时，游戏对第 1、2、3 档各调用两次随机数：</p>
+  <p><code class="inl">i = nextInt(8) + 1 + ⌊书架/2⌋ + nextInt(书架+1)</code></p>
+  <p>然后换算成你看到的花费：</p>
+  <ul>
+    <li>第 1 档 = max(⌊i/3⌋, 1)</li>
+    <li>第 2 档 = ⌊i×2/3⌋ + 1</li>
+    <li>第 3 档 = max(i, 书架×2)</li>
+  </ul>
+  <p>三档一共用掉 6 个随机数，全都由 <code class="inl">XpSeed</code> 播种而来。<span class="tagok">关键</span> 所以在同一个种子下，改书架数量只会改变数字，不会改变种子。</p>
+  <h3>1.2 附魔列表是怎么来的</h3>
+  <p>每一档再单独用 <code class="inl">XpSeed + 档位</code> 重新播种，独立生成附魔列表：先按物品的「附魔能力」把花费微调一下（<code class="inl">eCost</code>），再从「这件物品能出、且等级花费区间盖住 eCost」的附魔里按权重抽，抽中后把互斥的踢掉，然后按概率决定要不要再来一条、等级减半。</p>
+  <p>所以：<b>等级数字只取决于种子 + 书架数</b>；<b>附魔内容取决于种子 + 物品</b>。同一种子下，钻石剑和钻石镐的第 3 档数字都是 30，但给出的附魔完全不同。</p>
+  <h3>1.3 反向操作就是「破解」</h3>
+  <p>三档数字等于把种子的若干位泄露出来。一组观测能砍掉绝大部分种子，但还剩上千万个候选；不同书架数下的几组观测叠起来，就能把 43 亿个种子筛到只剩 1 个 —— 这就是 App 做的事（穷举 + 提前退出，多线程跑）。</p>
+  <h3>1.4 附魔一次，种子就换</h3>
+  <p>附魔消耗的是玩家随机数的<b>下一个</b> <code class="inl">nextInt()</code> 作为新种子。知道玩家随机数的 48 位内部状态，就能算出之后每一次附魔的种子 —— 这就是「刷种」，详见第 6 节。</p>
+</div>
+
+<div class="card" id="s2">
+  <h3 style="margin-top:0">2. 准备工作</h3>
+  <h3>2.0 需要准备的东西</h3>
+  <table>
+    <tr><th>物品</th><th>为什么</th></tr>
+    <tr><td>附魔台 ×1</td><td>放在 15 个书架中间，台子与书架之间那一格要空</td></tr>
+    <tr><td>书架 ×15</td><td>要能临时堵掉几个，别摆成没法动的形状</td></tr>
+    <tr><td>精准采集斧 ×1</td><td>搬书架用；<b>别带耐久附魔</b> —— 耐久触发时要掷随机数，可能打乱玩家随机数序列</td></tr>
+    <tr><td>祭品 ×3~5</td><td>能附魔的垃圾（木剑、书），刷种时用来消耗一次附魔换种子</td></tr>
+    <tr><td>经验 ≥ 30 级</td><td>第 3 档要 30 级；建议 40~60 级，可能要试几次</td></tr>
+    <tr><td>可丢弃物品 ×8 以上</td><td>刷种时按 Q 一件件投，用来对准投掷表某一行</td></tr>
+    <tr><td>方块若干</td><td>堵书架用：放在书架与台子之间那一格就失效一个</td></tr>
+  </table>
+  <p class="warn">从开始记数字到点下附魔，这些动作一律别做：<b>疾跑（冲刺）</b>、点任何一档附魔、换物品、挖方块、合成（含背包 2×2）、丢弃物品、吃东西、钓鱼、打架、开箱子、离开世界。
+  依据：社区实测表明 XP 种子会随玩家的<b>冲刺、挖掘、合成、丢弃</b>等动作推进，序列一旦错位，后面的推算全作废。</p>
+  <p class="hint">唯一的例外是<b>为了改变书架数量去放/挖方块</b>：它只改屏幕上的等级数字，不会换掉当前的种子 —— 所以「记录 6 组」这个流程本身是成立的。</p>
+  <h3>2.1 书架要能数得准</h3>
+  <p>Java 版规则：书架距台子<b>水平 2 格</b>（一个方向 2 格、另一个方向 0~2 格），高度与台子相同或高一格，并且台子和书架之间那一格必须是空气/雪/矮草这类可穿透方块。<b>最多生效 15 个</b>，多的不算。</p>
+  <p><span class="tagok">最快验证法</span> 打开附魔界面时，会有一批蓝白色粒子从有效书架飞向台子。<b>数粒子个数就是有效书架数</b>，比手数可靠。</p>
+  <p><span class="tagok">另一个判据</span> 书架为 15 时，第 3 档必定显示 <code class="inl">30</code>。看到 30 基本说明吃满 15 个。</p>
+  <h3>2.2 怎么临时改书架数量</h3>
+  <p>站在台子边，把书架和台子之间那一格用方块堵住（圆石、泥土都行），这个书架立刻失效，数量 -1；拆掉方块就恢复。想一次减好几个就堵几个。全程<b>不要动台子上的物品</b>，种子就不变。</p>
+  <p>也可以直接把书架打掉/搬走，但注意 15 → 0 要拆很多；用堵的办法更省事。</p>
+  <h3>2.3 选对物品</h3>
+  <p>记录观测时用什么物品都行（银鱼？不，用你真正想附魔的那件最好），但注意两点：</p>
+  <ul>
+    <li><b>等级数字与物品无关</b>，只与种子和书架数有关。所以你可以先拿一把木剑试探，最后再换目标物品 —— 只要中途没有附魔过。</li>
+    <li><b>附魔内容与物品强相关</b>。破解出来的三档附魔，只对「当时台子上那件物品」有效。App 里选错物品，看到的附魔就是错的。</li>
+  </ul>
+  <p>各材质附魔能力（影响 eCost，进而影响附魔等级高低）：金 25/22、皮革 15、下界合金 15、木 15、铁工具 14、铜 13、锁链 12、钻石 10、铁甲/海龟壳 9、石 5、书/弓/弩/三叉戟/钓鱼竿 1。</p>
+  <h3>2.4 一次只能规划一次附魔</h3>
+  <p>观测必须来自「还没附魔」的当前状态。一旦附魔，种子变了，之前的观测全部作废，要重新记。所以流程永远是：<b>先观察 → 破解 → 再决定附魔</b>。</p>
+</div>
+
+<div class="card" id="s3">
+  <h3 style="margin-top:0">3. 记录观测（最关键的一步）</h3>
+  <h3>3.1 记什么</h3>
+  <p>每组观测 = <b>书架数量 + 三档数字</b>。某档灰掉/不可选就填 <code class="inl">0</code>。</p>
+  <p>第 3 档在书架少的时候也能看到数字（比如 0 书架时是 1~8），照实填。</p>
+  <h3>3.2 建议记 6 组</h3>
+  <p>书架数越分散越好，下面这组是实测比较稳的组合：<b>15 / 13 / 10 / 6 / 3 / 0</b>。候选数量随组数下降得很快（实测，同一颗种子）：</p>
+  <table>
+    <tr><th>观测组数</th><th>剩余候选</th><th>能不能直接定案</th></tr>
+    <tr><td class="n">1 组</td><td class="n">约 1 亿</td><td><span class="tagbad">不行</span></td></tr>
+    <tr><td class="n">2 组</td><td class="n">约 200 万</td><td><span class="tagbad">不行</span></td></tr>
+    <tr><td class="n">3 组</td><td class="n">约 1.3 万</td><td><span class="tagbad">不行</span></td></tr>
+    <tr><td class="n">4 组</td><td class="n">约 800</td><td><span class="tagbad">不够</span></td></tr>
+    <tr><td class="n">5 组</td><td class="n">约 130</td><td>接近</td></tr>
+    <tr><td class="n">6 组</td><td class="n">1 个</td><td><span class="tagok">定案</span></td></tr>
+  </table>
+  <p class="hint">候选多于 1 个也不用重扫：在 App 里再加一组观测，会立刻把候选筛掉（毫秒级）。</p>
+  <h3>3.3 示例（下面这套数字是真实可复现的）</h3>
+  <table>
+    <tr><th>书架</th><th>上档</th><th>中档</th><th>下档</th></tr>
+    <tr><td class="n">15</td><td class="n">6</td><td class="n">11</td><td class="n">30</td></tr>
+    <tr><td class="n">13</td><td class="n">3</td><td class="n">11</td><td class="n">26</td></tr>
+    <tr><td class="n">10</td><td class="n">3</td><td class="n">13</td><td class="n">20</td></tr>
+    <tr><td class="n">6</td><td class="n">2</td><td class="n">9</td><td class="n">14</td></tr>
+    <tr><td class="n">3</td><td class="n">2</td><td class="n">7</td><td class="n">9</td></tr>
+    <tr><td class="n">0</td><td class="n">1</td><td class="n">6</td><td class="n">5</td></tr>
+  </table>
+  <p>这六组唯一对应种子 <code class="inl">63552300</code>。注意第 3 档随着书架减少从 30 一路降到 5 —— 这就是它能提供信息的原因（15 书架时第 3 档永远是 30，一点信息都没有）。</p>
+  <h3>3.4 记录时的纪律</h3>
+  <ul>
+    <li>中途<b>不要附魔</b>（包括点错档位）。</li>
+    <li>中途<b>不要换物品</b>：把物品拿下来再放，种子不变，但别换成别的物品后忘了换回来。</li>
+    <li>书架数要准确，宁可多确认一次粒子数。</li>
+    <li>记录顺序随意，App 会按你选的书架数自动对应。</li>
+  </ul>
+</div>
+
+<div class="card" id="s4">
+  <h3 style="margin-top:0">4. 破解</h3>
+  <h3>4.1 操作</h3>
+  <ol>
+    <li>进入 App 的<b>破解</b>页。</li>
+    <li>选书架数 → 填三档数字 → 点「添加这组观测」。重复到 6 组。</li>
+    <li>下面的「物品」选你台子上那件东西（决定最终显示哪些附魔），「展现书架」选你打算附魔时的书架数（通常 15）。</li>
+    <li>点「开始破解」。进度条走完通常 20~60 秒（手机浏览器会给 4~6 个线程）。</li>
+    <li>命中 1 个候选 → 直接显示 <code class="inl">XpSeed</code> 和三档真实结果。</li>
+  </ol>
+  <h3>4.2 命中的三种情况</h3>
+  <ul>
+    <li><b>1 个候选</b>：成功。种子可点「复制」，也可以点「填入刷种页的种子 A」。</li>
+    <li><b>几个到几百个</b>：正常。再加一组不同书架数的观测，候选会被立即筛掉（不用重扫）。</li>
+    <li><b>0 个</b>：观测之间自相矛盾。常见原因：数字记错、书架数算错（粒子数没数对）、中途附魔过、服务器改了附魔台逻辑。</li>
+  </ul>
+  <h3>4.3 如果服务器有插件</h3>
+  <p>原版才有这套逻辑。装了改附魔台/改随机数的插件（或数据包改附魔定义）就会出现「怎么记都破不出来」。原版生存服、单人存档都能用。</p>
+</div>
+
+<div class="card" id="s5">
+  <h3 style="margin-top:0">5. 读懂三档结果</h3>
+  <p>以种子 <code class="inl">63552300</code>、钻石镐、15 书架为例，App 会显示：</p>
+  <table>
+    <tr><th>档位</th><th>需要</th><th>会给的附魔</th></tr>
+    <tr><td class="n">第 1 档</td><td class="n">6 级</td><td>耐久 I、效率 I</td></tr>
+    <tr><td class="n">第 2 档</td><td class="n">11 级</td><td>效率 II、耐久 II</td></tr>
+    <tr><td class="n">第 3 档</td><td class="n">30 级</td><td><b class="hl">效率 IV、时运 III、耐久 III</b></td></tr>
+  </table>
+  <p>同一颗种子换成钻石剑，等级数字一模一样（6 / 11 / 30），但内容是：锋利 I + 横扫之刃 I / 耐久 II + 节肢杀手 II + 横扫之刃 I / 亡灵杀手 IV + 击退 II + 耐久 III。同一颗种子换成一本书（附魔书）：密度 I / 击退 I + 摔落保护 II / 击退 II + 保护 III —— 书能出所有非宝物附魔，所以内容又多又杂。</p>
+  <h3>5.1 「不可选」是什么意思</h3>
+  <p>某档要求的花费等级低于该档序号（比如第 2 档只需要 1 级）时，游戏不会让你选它，App 会标「不可选」。想让它可用，就调整书架数量或换个附魔能力更低/更高的物品。</p>
+  <h3>5.2 等级不够怎么办</h3>
+  <ul>
+    <li>先升到 30 级再附魔，别浪费。</li>
+    <li>或者减少书架数让第 3 档变便宜 —— 但附魔也会变弱（eCost 跟着变），通常不值得。</li>
+    <li>材质会改变结果：金的附魔能力最高，同一档更容易出高等级附魔（但金装备耐久差）。</li>
+  </ul>
+  <h3>5.3 想要的经验修补？</h3>
+  <p>台子出不了。经验修补、灵魂疾行、迅捷潜行、冰霜行者、风爆、两个诅咒都属于宝物附魔，不出现在附魔台里，只能靠箱子/钓鱼/村民/铁砧。App 的候选集里也只有 36 个非宝物附魔（含突刺）。</p>
+</div>
+
+<div class="card" id="s6">
+  <h3 style="margin-top:0">6. 刷种：把「下一次」也算出来</h3>
+  <h3>6.1 先理解两件事</h3>
+  <ul>
+    <li><b>附魔一次</b> = 玩家随机数消耗 1 次 <code class="inl">nextInt()</code>（新种子就是它的输出）。</li>
+    <li><b>投掉一件物品</b>（按 Q）= 消耗 4 次 <code class="inl">nextFloat()</code>。</li>
+  </ul>
+  <p>所以「先投掉 n 件物品，再附魔」用的种子是可以提前算出来的。<span class="tagok">关键</span> 只要中间不做别的消耗玩家随机数的动作。</p>
+  <h3>6.2 怎么拿到相邻的两个种子</h3>
+  <ol>
+    <li>破解 → 得到种子 <b>A</b>（当前这次附魔会用的种子）。</li>
+    <li>随便附魔一件东西（哪怕是木剑，或者干脆接受这次附魔），种子自动变成 B。</li>
+    <li>重新记 6 组观测、再破解一次 → 得到种子 <b>B</b>。</li>
+    <li>App 的<b>刷种</b>页填 A 和 B，点「求解随机数状态」。</li>
+  </ol>
+  <p>A、B 必须是紧邻的两次输出（中间只发生了一次附魔）。如果提示求解失败，说明中间有别的动作插进来了。</p>
+  <h3>6.3 示例（真实数字）</h3>
+  <p>假设破解得到 A = 3302031503，附魔一次后再破解得到 B = 437421052。App 解出玩家随机数状态 <code class="inl">1A1283FC0014</code>，然后给出钻石镐 + 15 书架的表：</p>
+  <table>
+    <tr><th>投掉</th><th>种子</th><th>第 3 档会给</th></tr>
+    <tr><td class="n">0 件</td><td class="n">4047242446</td><td>效率 IV</td></tr>
+    <tr><td class="n">1 件</td><td class="n">2129447227</td><td>效率 IV、耐久 III</td></tr>
+    <tr><td class="n">2 件</td><td class="n">63552300</td><td><b class="hl">效率 IV、时运 III、耐久 III</b></td></tr>
+    <tr><td class="n">3 件</td><td class="n">814169357</td><td>效率 IV</td></tr>
+    <tr><td class="n">4 件</td><td class="n">2184578844</td><td>效率 III、耐久 III</td></tr>
+  </table>
+  <p>于是操作就是：投 2 件东西 → 放上钻石镐 → 界面第 3 档应该显示 30 级、内容是效率 IV + 时运 III + 耐久 III → 附魔。</p>
+  <h3>6.4 自检：用数字对答案</h3>
+  <p>表里每一档都标了「需 N 级」。进游戏后三档显示的等级应该和表里完全一致。一致 → 状态没错位，可以放心附魔；不一致 → 中途有别的动作消耗了随机数，重新破解。</p>
+  <h3>6.5 一旦状态确定，可以连着规划好几次</h3>
+  <p>附魔只消耗 1 次 nextInt，所以第 2 次、第 3 次附魔的种子也能顺着算下去（表里每个「投掉 n 件」其实都可以继续往后推）。真正容易出错的是那些不显眼的随机数消耗，所以<b>每步都用三档数字核对</b>。</p>
+  <p class="warn">别做这些：投掷、钓鱼、吃东西/喝药水（某些粒子与行为会用玩家随机数）、暴击、经验修补触发等。安全做法：规划 → 附魔 → 立刻核对下一步数字。</p>
+</div>
+
+<div class="card" id="s7">
+  <h3 style="margin-top:0">7. 两个实战剧本</h3>
+  <h3>剧本 A：这次就有，直接拿</h3>
+  <ol>
+    <li>背包里有 <b>30 级</b>，摆 15 书架，放上钻石镐。看到 <code class="inl">6 / 11 / 30</code>。</li>
+    <li>按第 3 节记满 6 组（15/13/10/6/3/0）。</li>
+    <li>破解 → 种子 <code class="inl">63552300</code> → 第 3 档：<b>效率 IV + 时运 III + 耐久 III</b>。</li>
+    <li>就是它，点第 3 档。完事。</li>
+  </ol>
+  <h3>剧本 B：这次不行，靠投票刷</h3>
+  <ol>
+    <li>破解得到种子 A，三档全是垃圾。</li>
+    <li>先附魔一把木剑（或者干脆把这次机会用掉），拿到种子 B：重新记 6 组、再破解。</li>
+    <li>刷种页填 A、B → 看哪一行投 n 件后出目标附魔，比如「投 2 件 → 效率 IV + 时运 III + 耐久 III」。</li>
+    <li>投掉 2 件垃圾物品 → 放上钻石镐 → 核对三档数字（应为 6 / 11 / 30）→ 附魔。</li>
+  </ol>
+  <p class="hint">注意每次附魔都会换种子，所以剧本 B 里「先附魔一次拿 B」这一步是有代价的。想少浪费，第一次就先拿便宜物品（书、木剑）试水。</p>
+</div>
+
+<div class="card" id="s8">
+  <h3 style="margin-top:0">8. 常见问题</h3>
+  <p><b>Q：破解 0 个候选？</b><br>按这个顺序查：三档数字是否同一时刻、书架数是否数对（粒子计数）、中途有没有附魔过、物品有没有换过。都正常还破不出来，基本就是服务器/数据包改了附魔逻辑。</p>
+  <p><b>Q：候选几百个怎么办？</b><br>加一组新书架数的观测，候选立刻被筛掉，不用重扫。</p>
+  <p><b>Q：提示「候选太多」？</b><br>观测少于 3 组。至少 3 组，建议 6 组。</p>
+  <p><b>Q：为什么我的镐出不了锋利？某件物品到底能吃哪些附魔？</b><br>
+  台子只按「物品的可附魔标签」筛：锋利/亡灵/节肢只作用于剑、斧、长矛这一系，镐子只有效率、耐久、时运、精准采集。
+  开 App 右上角的<b>「附魔表」</b>，选物品就能看到「能出」和「吃不到（附原因）」两张清单。</p>
+  <p><b>Q：为什么第 3 档总是 30？</b><br>15 书架时第 3 档 = max(i, 30) = 30，永远是 30。所以它不含信息，靠改书架数量拿其它数字。</p>
+  <p><b>Q：App 显示的附魔和游戏里不一样？</b><br>游戏里根本不显示附魔名（只有银河字母）。先确认物品选对、书架选对、种子没变。</p>
+  <p><b>Q：刷种提示「不是相邻的 nextInt 输出」？</b><br>A、B 之间除了那一次附魔还有别的动作，或者你填反了顺序。A 必须是先出现的那个。</p>
+  <p><b>Q：数字核对不上，但上次明明是对的？</b><br>中途有动作消耗了玩家随机数。重新记 6 组、重新破解一次即可。</p>
+  <p><b>Q：附魔书能用这套吗？</b><br>能。物品选「书（附魔书）」，书能出所有非宝物附魔，内容最杂；同一颗种子下书的附魔和剑完全不同。</p>
+  <p><b>Q：不同版本都能用吗？</b><br>数据按 1.21.4 原版取。1.20 及更早的附魔挑选顺序略有差异，个别附魔可能出现不同结果；未来版本若改了附魔台逻辑可能整体失效。</p>
+  <p><b>Q：会不会封号 / 算作弊？</b><br>App 只是个离线计算器，不连服务器、不改游戏文件。它利用的是原版随机数可预测这一特性，判断标准由各服务器自己定。</p>
+</div>
+
+<div class="card">
+  <h3 style="margin-top:0">附：术语与数据</h3>
+  <ul>
+    <li><code class="inl">XpSeed</code>：玩家数据里的 32 位附魔种子，附魔后重掷。</li>
+    <li><code class="inl">eCost</code>：附魔花费（内部值），先按附魔能力微调，再决定能出哪些等级的附魔。</li>
+    <li><code class="inl">nextInt / nextFloat</code>：<code class="inl">java.util.Random</code> 的取数方法，本工具按原版实现复刻。</li>
+    <li>附魔数据：26.3 原版数据包（与 1.21.4–1.21.10 逐字段核对一致），36 个非宝物附魔的权重、等级花费区间、可用物品、互斥组；1.21.9 的铜制装备、1.21.11 的长矛与突刺已包含。</li>
+    <li>多附魔判定：按 (剩余等级+1)/50 继续、等级减半；概率为 2 万次模拟结果，可能有极小误差。</li>
+  </ul>
+</div>
+</div>
+<script>
+/* 返回按钮：回到向导主界面（App 内叫 index.html，下载目录版叫 附魔台RNG向导.html）
+   同时用内联样式强制固定，避免个别 WebView 对 .fix 类样式解析失效导致按钮跟着页面滚走 */
+(function () {
+  function satTop() {
+    var v = '';
+    try { v = getComputedStyle(document.documentElement).getPropertyValue('--sat').trim(); } catch (e) {}
+    if (!v) v = 'env(safe-area-inset-top,0px)';
+    return 'calc(8px + ' + v + ')';
+  }
+  function pin() {
+    var b = document.getElementById('backBtn');
+    if (!b) return;
+    // 只有独立教程页需要脱离文档流固定；标签版里的按钮在 sticky 标题栏内，保持原样
+    if (!b.classList.contains('fix')) return;
+    b.style.setProperty('position', 'fixed', 'important');
+    b.style.setProperty('left', '12px', 'important');
+    b.style.setProperty('top', satTop(), 'important');
+    b.style.setProperty('z-index', '9999', 'important');
+    b.style.setProperty('margin', '0', 'important');
+    b.style.setProperty('width', 'auto', 'important');
+    b.style.setProperty('max-width', '40%', 'important');
+  }
+  function backTarget() {
+    var p = '';
+    try { p = decodeURIComponent(location.pathname); } catch (e) { p = location.pathname || ''; }
+    var zh = /[\u4e00-\u9fa5]/.test(p);
+    var t = zh ? '附魔台RNG向导.html' : 'index.html';
+    var th = document.documentElement.getAttribute('data-theme');
+    if (th === 'light' || th === 'dark') t += '#theme=' + th;
+    return t;
+  }
+  // 自愈：若该 WebView 对 position:fixed 支持异常（按钮跟着文档滚走），
+  // 改用绝对定位 + 滚动同步，保证始终贴在屏幕左上角
+  var fixedOk = true, satPx = 0;
+  function readSat() {
+    var v = '';
+    try { v = getComputedStyle(document.documentElement).getPropertyValue('--sat').trim(); } catch (e) {}
+    var m = /^([0-9.]+)px$/.exec(v);
+    satPx = m ? parseFloat(m[1]) : 0;
+  }
+  function follow() {
+    var b = document.getElementById('backBtn');
+    if (!b) return;
+    var y = (window.pageYOffset || document.documentElement.scrollTop || 0) + 8 + satPx;
+    b.style.setProperty('top', y + 'px', 'important');
+  }
+  function onScroll() {
+    var b = document.getElementById('backBtn');
+    if (!b || !b.classList.contains('fix')) return;
+    if (fixedOk) {
+      var r = b.getBoundingClientRect();
+      if (r.top > 80 || r.bottom < 0) {
+        fixedOk = false;
+        readSat();
+        b.style.setProperty('position', 'absolute', 'important');
+        follow();
+      }
+    } else {
+      follow();
+    }
+  }
+  window.__backTarget = backTarget;
+  window.__pinBack = pin;
+  function start() { pin(); readSat(); try { window.addEventListener('scroll', onScroll, { passive: true }); } catch (e) {} }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+  else start();
+  document.addEventListener('click', function (e) {
+    var n = e.target;
+    while (n && n !== document.body) {
+      if (n.id === 'backBtn' || (n.className && String(n.className).indexOf('backbtn') >= 0)) {
+        e.preventDefault();
+        try { location.href = backTarget(); } catch (err) {}
+        return;
+      }
+      n = n.parentNode;
+    }
+  }, false);
+})();
+
+</script>
+</body>
+</html>
