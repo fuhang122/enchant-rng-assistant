@@ -1,8 +1,7 @@
 import sys, re, os
-SRC = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, SRC)
-from build_themeify import themeify
-B = SRC + os.sep; BB = B + 'build' + os.sep; W = B + 'wiz' + os.sep
+sys.path.insert(0,'/root/workspace/mcrng')
+from build import themeify
+B='/root/workspace/mcrng/'; BB=B+'build/'; W=B+'wiz/'
 
 # 1) 数据 → core.js
 data=open(BB+'data.json').read()

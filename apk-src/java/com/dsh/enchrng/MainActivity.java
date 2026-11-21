@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
+import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -76,6 +78,18 @@ public class MainActivity extends Activity {
     }
 
     private class Bridge {
+        @JavascriptInterface
+        public void openUrl(final String url) {
+            if (url == null || !(url.startsWith("http://") || url.startsWith("https://"))) return;
+            runOnUiThread(new Runnable() {
+                @Override public void run() {
+                    try {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                    } catch (Exception ignored) {}
+                }
+            });
+        }
+
         @JavascriptInterface
         public void exitApp() {
             runOnUiThread(new Runnable() {

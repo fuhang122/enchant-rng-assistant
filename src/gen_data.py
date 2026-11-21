@@ -2,10 +2,6 @@
 """从 26.3 原版数据生成附魔/物品数据表（build/data.json）"""
 import json, os
 
-ROOT = os.path.dirname(os.path.abspath(__file__))
-DATA = os.path.join(ROOT, '..', 'data', 'enchantments')
-TAGS = os.path.join(ROOT, '..', 'data', 'tags')
-
 cn = {
 'aqua_affinity':'水下速掘','bane_of_arthropods':'节肢杀手','binding_curse':'绑定诅咒',
 'blast_protection':'爆炸保护','breach':'破甲','channeling':'引雷','density':'密度',
@@ -90,10 +86,10 @@ def expand(tagstr):
 
 # ---------------- 附魔（26.3 数据包） ----------------
 non_treasure = [x.split(':')[1] for x in
-                json.load(open(os.path.join(TAGS,'_tags_enchantment_non_treasure.json')))['values']]
+                json.load(open('t263/_tags_enchantment_non_treasure.json'))['values']]
 ench = []
 for eid in sorted(non_treasure):
-    d = json.load(open(os.path.join(DATA, eid + '.json')))
+    d = json.load(open('e263/' + eid + '.json'))
     ex = d.get('exclusive_set')
     ench.append({
         'id': eid, 'name': cn.get(eid, eid), 'max': d['max_level'], 'w': d['weight'],
@@ -114,7 +110,7 @@ excl = {
 
 out = {'items': items, 'ench': ench, 'excl': excl}
 os.makedirs('build', exist_ok=True)
-json.dump(out, open(os.path.join(ROOT, 'build', 'data.json'), 'w'), ensure_ascii=False, indent=0)
+json.dump(out, open('build/data.json', 'w'), ensure_ascii=False, indent=0)
 print(len(items), len(ench))
 
 # ---------------- 自检 ----------------

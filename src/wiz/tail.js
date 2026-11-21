@@ -194,7 +194,8 @@ function build() {
         '<div class="hcell"><b>长矛 · 突刺</b><span>1.21.11+ 已支持</span></div>' +
         '</div>',
       actions: [{ act: 'startNow', label: '开始', cls: 'primary' }],
-      tail: '<button class="nogain" data-act="noMore">不再提示</button>'
+      tail: '<button class="nogain" data-act="noMore">不再提示</button>' +
+        '<a class="githint" data-act="openRepo">源码与更新 · github.com/fuhang122/enchant-rng-assistant</a>'
     };
 
     case 'prep': return {
@@ -776,6 +777,8 @@ document.addEventListener('click', ev => {
   if (act === 'openEnch') {
     fillEnchItems(''); $('enchItem').value = S.item; PickSheet.syncAll();
     renderEnch(); openSheet('enchSheet');
+  } else if (act === 'openRepo') {
+    openExt(REPO_URL);
   } else if (act === 'openSet') {
     openSheet('setSheet');
   } else if (act === 'prepDone') {
@@ -1080,6 +1083,13 @@ function renderEnch() {
 
 /* ---------- 面板（设置 / 高级） ---------- */
 
+/* 外链：App 内走原生桥交给浏览器，网页版直接新窗口 */
+const REPO_URL = 'https://github.com/fuhang122/enchant-rng-assistant';
+function openExt(url) {
+  try { if (window.AndroidHost && AndroidHost.openUrl) { AndroidHost.openUrl(url); return; } } catch (e) {}
+  try { window.open(url, '_blank'); } catch (e) {}
+}
+
 /* 退出要按两次返回键 */
 let QUIT_ARM = 0;
 function armQuit() {
@@ -1143,6 +1153,8 @@ $('optWelcome').onchange = ev => {
   CFG.welcome = ev.target.checked; save();
   toast(CFG.welcome ? '启动时会显示首页' : '启动时跳过首页');
 };
+const repoBtn = $('repoBtn');
+if (repoBtn) repoBtn.onclick = () => openExt(REPO_URL);
 $('resetAll').onclick = () => {
   S.obs = []; S.plan = PLAN.slice(); S.idx = 0; S.cands = null; S.seedA = S.seedB = null;
   S.state = null; S.phase = 'A'; S.finalSeed = null;

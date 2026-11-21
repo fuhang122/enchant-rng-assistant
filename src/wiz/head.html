@@ -218,6 +218,8 @@ body.welcome-mode .nogain{margin-top:14px}
 .find{width:100%;box-sizing:border-box;margin:0 0 8px;padding:10px 13px;border-radius:11px;border:1px solid var(--line);background:var(--bg2);color:var(--fg);font-size:14px;outline:none}
 .find:focus{border-color:var(--accent)}
 .find::placeholder{color:var(--dim)}
+.githint{display:block;margin:10px auto 0;font-size:11.5px;color:var(--dim);text-align:center;text-decoration:none;border-bottom:1px dashed var(--line);padding-bottom:2px}
+.githint:active{color:var(--accent2)}
 </style>
 </head>
 <body>
@@ -262,6 +264,11 @@ body.welcome-mode .nogain{margin-top:14px}
   <div class="setgrp">
     <div class="setlabel">启动</div>
     <label class="sw"><input type="checkbox" id="optWelcome"><span>启动时显示首页介绍</span></label>
+  </div>
+  <div class="setgrp">
+    <div class="setlabel">关于</div>
+    <button class="wbtn" id="repoBtn" style="margin-top:0">项目主页（GitHub）</button>
+    <p class="hint" style="margin:6px 0 0">源码、更新记录和在线版都在 github.com/fuhang122/enchant-rng-assistant</p>
   </div>
   <div class="setgrp">
     <div class="setlabel">其他</div>
